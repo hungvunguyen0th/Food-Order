@@ -90,7 +90,7 @@ app.Run();
 
 async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, AppDbContext context)
 {
-    string[] roles = { "Admin", "FoodAdmin", "UserAdmin", "Staff", "Customer" };
+    string[] roles = { "AdminIT", "FoodAdmin", "UserAdmin", "Staff", "Customer" };
     foreach (var role in roles)
     {
         if (!await roleManager.RoleExistsAsync(role))
@@ -99,12 +99,12 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
         }
     }
 
-    // SuperAdmin
+    // ✅ SuperAdmin (AdminIT)
     if (await userManager.FindByEmailAsync("adminit@gmail.com") == null)
     {
         var admin = new ApplicationUser
         {
-            UserName = "adminit@gmail.com",
+            UserName = "adminit@gmail. com",
             Email = "adminit@gmail.com",
             FullName = "Super Administrator",
             EmailConfirmed = true,
@@ -115,21 +115,18 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
         var result = await userManager.CreateAsync(admin, "AdminIT@123");
         if (result.Succeeded)
         {
-            await userManager.AddToRoleAsync(admin, "Admin");
-            await userManager.AddClaimAsync(admin, new Claim("CanManageFood", "true"));
-            await userManager.AddClaimAsync(admin, new Claim("CanManageUser", "true"));
-            Console.WriteLine("✅ AdminIT created with both claims");
+            await userManager.AddToRoleAsync(admin, "AdminIT");
         }
     }
 
-    // FoodAdmin
+    // ✅ Food Admin
     if (await userManager.FindByEmailAsync("foodadmin@gmail.com") == null)
     {
         var foodAdmin = new ApplicationUser
         {
             UserName = "foodadmin@gmail.com",
             Email = "foodadmin@gmail.com",
-            FullName = "Food Administrator",
+            FullName = "Quản lý Món ăn",
             EmailConfirmed = true,
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
@@ -139,18 +136,17 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(foodAdmin, "FoodAdmin");
-            await userManager.AddClaimAsync(foodAdmin, new Claim("CanManageFood", "true"));
         }
     }
 
-    // UserAdmin
+    // ✅ User Admin
     if (await userManager.FindByEmailAsync("useradmin@gmail.com") == null)
     {
         var userAdmin = new ApplicationUser
         {
             UserName = "useradmin@gmail.com",
             Email = "useradmin@gmail.com",
-            FullName = "User Administrator",
+            FullName = "Quản lý User",
             EmailConfirmed = true,
             CreatedAt = DateTime.Now,
             UpdatedAt = DateTime.Now
@@ -160,27 +156,69 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(userAdmin, "UserAdmin");
-            await userManager.AddClaimAsync(userAdmin, new Claim("CanManageUser", "true"));
         }
     }
 
-    if (!context.ProductSizes.Any())
+    // ✅ STAFF 1 - Nhân viên bán hàng
+    if (await userManager.FindByEmailAsync("staff@gmail.com") == null)
     {
-        context.ProductSizes.AddRange(
-            new ProductSize { Name = "Nhỏ", ExtraPrice = 0 },
-            new ProductSize { Name = "Vừa", ExtraPrice = 5000 },
-            new ProductSize { Name = "Lớn", ExtraPrice = 10000 }
-        );
-        await context.SaveChangesAsync();
+        var staff = new ApplicationUser
+        {
+            UserName = "staff@gmail. com",
+            Email = "staff@gmail.com",
+            FullName = "Nhân viên bán hàng",
+            PhoneNumber = "0123456789",
+            EmailConfirmed = true,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+
+        var result = await userManager.CreateAsync(staff, "Staff@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(staff, "Staff");
+        }
     }
 
-    if (!context.ProductToppings.Any())
+    // ✅ STAFF 2 - Nhân viên ca 2
+    if (await userManager.FindByEmailAsync("staff2@gmail.com") == null)
     {
-        context.ProductToppings.AddRange(
-            new ProductTopping { Name = "Không", ExtraPrice = 0 },
-            new ProductTopping { Name = "Trân châu", ExtraPrice = 5000 },
-            new ProductTopping { Name = "Thạch", ExtraPrice = 5000 }
-        );
-        await context.SaveChangesAsync();
+        var staff2 = new ApplicationUser
+        {
+            UserName = "staff2@gmail.com",
+            Email = "staff2@gmail.com",
+            FullName = "Nguyễn Thị B",
+            PhoneNumber = "0987654321",
+            EmailConfirmed = true,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+
+        var result = await userManager.CreateAsync(staff2, "Staff@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(staff2, "Staff");
+        }
+    }
+
+    // ✅ Customer Demo
+    if (await userManager.FindByEmailAsync("customer@gmail.com") == null)
+    {
+        var customer = new ApplicationUser
+        {
+            UserName = "customer@gmail.com",
+            Email = "customer@gmail.com",
+            FullName = "Khách hàng demo",
+            PhoneNumber = "0369852147",
+            EmailConfirmed = true,
+            CreatedAt = DateTime.Now,
+            UpdatedAt = DateTime.Now
+        };
+
+        var result = await userManager.CreateAsync(customer, "Customer@123");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(customer, "Customer");
+        }
     }
 }

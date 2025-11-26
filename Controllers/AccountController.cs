@@ -117,7 +117,7 @@ namespace Asm_GD1.Controllers
                     }
                     else if (role == "staff")
                     {
-                        return RedirectToAction("Dashboard", "SalesStaff");
+                        return RedirectToAction("Index", "POS");
                     }
                     else
                     {

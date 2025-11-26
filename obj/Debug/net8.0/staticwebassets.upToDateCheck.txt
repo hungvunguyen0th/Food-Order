@@ -18,6 +18,7 @@ wwwroot\css\pages\home.css
 wwwroot\css\pages\login.css
 wwwroot\css\pages\menu-page.css
 wwwroot\css\pages\news.css
+wwwroot\css\pages\pos.css
 wwwroot\css\pages\Register.css
 wwwroot\css\pages\sales-dashboard.css
 wwwroot\css\pages\user-management.css
@@ -152,3 +153,4 @@ wwwroot\lib\jquery\dist\jquery.js
 wwwroot\lib\jquery\dist\jquery.min.js
 wwwroot\lib\jquery\dist\jquery.min.map
 wwwroot\lib\jquery\LICENSE.txt
+wwwroot\js\pos.js

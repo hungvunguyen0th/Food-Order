@@ -1,0 +1,181 @@
+﻿@model List<Asm_GD1.Models.Product>
+@{
+    ViewData["Title"] = "POS - Đặt món";
+    Layout = null;
+    var categories = ViewBag.Categories as List<string> ?? new List<string>();
+}
+
+<! DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1. 0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/pages/pos.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="pos-container">
+        <!-- HEADER -->
+        <header class="pos-header">
+            <div class="header-left">
+                <img src="~/Images/Food-logo.jpg" alt="Logo" class="logo">
+                <h1>POS - Đặt món</h1>
+            </div>
+            <div class="header-right">
+                <div class="staff-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span>@(User.Identity?. Name ?? "Staff")</span>
+                </div>
+                <div class="current-time" id="currentTime"></div>
+                <a asp-controller="Account" asp-action="Logout" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </a>
+            </div>
+        </header>
+
+        <div class="pos-main">
+            <!-- LEFT: DANH SÁCH MÓN ĂN -->
+            <div class="products-section">
+                <!-- Category Filter -->
+                <div class="category-filter">
+                    <button class="category-btn active" onclick="filterCategory('all')">
+                        <i class="fas fa-th"></i> Tất cả
+                    </button>
+                    @if (categories != null && categories.Any())
+                    {
+                        @foreach (var category in categories)
+                        {
+                            <button class="category-btn" onclick="filterCategory('@category')">
+                                @category
+                            </button>
+                        }
+                    }
+                </div>
+
+                <!-- Search -->
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchProduct" placeholder="Tìm món ăn..." onkeyup="searchProducts()">
+                </div>
+
+                <!-- Product Grid -->
+                <div class="products-grid" id="productsGrid">
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var product in Model)
+                        {
+                            var categoryName = product.Category?.Name ??  "Khác";
+                            var price = product.BasePrice;
+                            <div class="product-card" 
+                                 data-category="@categoryName" 
+                                 data-id="@product.ProductID" 
+                                 data-name="@product.Name" 
+                                 data-price="@price">
+                                <img src="@Url.Content(product.ImageUrl ??  "/Images/placeholder.jpg")" 
+                                     alt="@product.Name" 
+                                     onerror="this.src='/Images/placeholder.jpg'">
+                                <div class="product-info">
+                                    <h3>@product.Name</h3>
+                                    <p class="price">@string.Format("{0:N0}₫", price)</p>
+                                </div>
+                                <button class="btn-add" onclick="addToOrder(@product.ProductID, '@Html.Raw(product.Name. Replace("'", "\\'"))', @price)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #999;">
+                            <i class="fas fa-utensils" style="font-size: 48px; margin-bottom: 15px;"></i>
+                            <p>Chưa có món ăn nào</p>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- RIGHT: ĐƠN HÀNG -->
+            <div class="order-section">
+                <div class="order-header">
+                    <h2>Đơn hàng hiện tại</h2>
+                    <button class="btn-clear-order" onclick="clearOrder()">
+                        <i class="fas fa-trash"></i> Xóa tất cả
+                    </button>
+                </div>
+
+                <!-- Customer Info -->
+                <div class="customer-info">
+                    <input type="text" id="customerName" placeholder="Tên khách hàng" class="input-customer">
+                    <input type="text" id="customerPhone" placeholder="Số điện thoại" class="input-customer">
+                </div>
+
+                <!-- Order Items -->
+                <div class="order-items" id="orderItems">
+                    <div class="empty-order">
+                        <i class="fas fa-shopping-basket"></i>
+                        <p>Chưa có món nào</p>
+                    </div>
+                </div>
+
+                <!-- Order Summary -->
+                <div class="order-summary">
+                    <div class="summary-row">
+                        <span>Tạm tính:</span>
+                        <span id="subtotal">0₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Giảm giá:</span>
+                        <span id="discount">0₫</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Tổng cộng:</span>
+                        <span id="total">0₫</span>
+                    </div>
+                </div>
+
+                <!-- Payment Methods -->
+                <div class="payment-methods">
+                    <h3>Phương thức thanh toán</h3>
+                    <div class="payment-options">
+                        <button class="payment-btn active" data-method="cash" onclick="selectPayment('cash')">
+                            <i class="fas fa-money-bill-wave"></i> Tiền mặt
+                        </button>
+                        <button class="payment-btn" data-method="card" onclick="selectPayment('card')">
+                            <i class="fas fa-credit-card"></i> Thẻ
+                        </button>
+                        <button class="payment-btn" data-method="momo" onclick="selectPayment('momo')">
+                            <i class="fas fa-mobile-alt"></i> MoMo
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="order-actions">
+                    <button class="btn-hold-order" onclick="holdOrder()">
+                        <i class="fas fa-pause"></i> Giữ đơn
+                    </button>
+                    <button class="btn-complete-order" onclick="completeOrder()">
+                        <i class="fas fa-check"></i> Hoàn tất
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/pos.js"></script>
+    <script>
+        // Update current time
+        function updateTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('vi-VN');
+            const timeElement = document.getElementById('currentTime');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html>

@@ -275,26 +275,72 @@ namespace Asm_GD1.Controllers
         }
 
         // ========================================
-        // REMOVE FROM CART
+        // CART COUNT VALUE - API ĐẾM SỐ LƯỢNG
+        // ========================================
+        [HttpGet]
+        public async Task<IActionResult> CartCountValue()
+        {
+            try
+            {
+                var cart = await GetOrCreateCartAsync();
+                var totalItems = cart.CartItems.Sum(x => x.Quantity);
+                return Content(totalItems.ToString());
+            }
+            catch
+            {
+                return Content("0");
+            }
+        }
+        // ========================================
+        // REMOVE FROM CART - SỬA LẠI
         // ========================================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveFromCart(
             int productId, int? sizeId, string toppingIds)
         {
-            var cart = await GetOrCreateCartAsync();
-            var item = cart.CartItems.FirstOrDefault(i =>
-                i.ProductID == productId
-                && i.SizeID == sizeId
-                && i.ToppingIDs == toppingIds);
-
-            if (item != null)
+            try
             {
-                _context.CartItems.Remove(item);
-                await _context.SaveChangesAsync();
-            }
+                var cart = await GetOrCreateCartAsync();
 
-            return RedirectToAction("Index");
+                CartItem item = null;
+
+                if (productId > 0)
+                {
+                    item = cart.CartItems.FirstOrDefault(i =>
+                        i.ProductID == productId
+                        && i.SizeID == sizeId
+                        && i.ToppingIDs == toppingIds);
+                }
+                else
+                {
+                    var productName = Request.Form["productName"].ToString();
+                    item = cart.CartItems.FirstOrDefault(i =>
+                        i.ProductID == 0 &&
+                        i.ProductName == productName &&
+                        string.IsNullOrEmpty(i.SizeName) &&
+                        string.IsNullOrEmpty(i.ToppingName));
+                }
+
+                if (item != null)
+                {
+                    _context.CartItems.Remove(item);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Đã xóa món khỏi giỏ hàng!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Không tìm thấy món trong giỏ hàng! ";
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error removing item: {ex.Message}");
+                TempData["ErrorMessage"] = "Có lỗi khi xóa món! ";
+                return RedirectToAction("Index");
+            }
         }
 
         // ========================================

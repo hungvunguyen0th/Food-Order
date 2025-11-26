@@ -33,7 +33,6 @@ E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\
 E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.DotNet.Scaffolding.Shared.dll
 E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.dll
 E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Design.dll
 E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.Relational.dll
 E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
