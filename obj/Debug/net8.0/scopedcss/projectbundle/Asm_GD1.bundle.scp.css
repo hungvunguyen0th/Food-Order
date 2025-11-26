@@ -1,4 +1,4 @@
-/* _content/Asm_GD1/Views/Cart/Index.cshtml.rz.scp.css */
+/* /Views/Cart/Index.cshtml.rz.scp.css */
 .cart-page[b-bewwd5srd0] {
     padding: 20px;
     max-width: 1200px;
@@ -137,7 +137,7 @@
     cursor: pointer;
     margin-top: 20px;
 }
-/* _content/Asm_GD1/Views/Shared/_Layout.cshtml.rz.scp.css */
+/* /Views/Shared/_Layout.cshtml.rz.scp.css */
 /* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 

@@ -15,211 +15,213 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v8.0
 build_property.RootNamespace = Asm_GD1
 build_property.RootNamespace = Asm_GD1
-build_property.ProjectDir = E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1\
+build_property.ProjectDir = /home/runner/work/Food-Order/Food-Order/
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = E:\STUDY\NET1051 - Lập trình C#5\HUNG C4 + C5\ASMC4\Asm_GD1
+build_property.MSBuildProjectDirectory = /home/runner/work/Food-Order/Food-Order
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/About/Story.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWJvdXRcU3RvcnkuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/About/Story.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWJvdXQvU3RvcnkuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/About/Team.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWJvdXRcVGVhbS5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/About/Team.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWJvdXQvVGVhbS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/About/Values.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWJvdXRcVmFsdWVzLmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/About/Values.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWJvdXQvVmFsdWVzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Account/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Account/Profile.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxQcm9maWxlLmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/Account/Profile.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Qcm9maWxlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Account/Register.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxSZWdpc3Rlci5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Account/Register.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9SZWdpc3Rlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Cart/Checkout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxDaGVja291dC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Cart/Checkout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2FydC9DaGVja291dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Cart/Success.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxTdWNjZXNzLmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/Cart/Success.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2FydC9TdWNjZXNzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/CategoryAdmin/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlBZG1pblxDcmVhdGUuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/CategoryAdmin/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2F0ZWdvcnlBZG1pbi9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/CategoryAdmin/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlBZG1pblxEZWxldGUuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/CategoryAdmin/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2F0ZWdvcnlBZG1pbi9EZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/CategoryAdmin/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlBZG1pblxFZGl0LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/CategoryAdmin/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2F0ZWdvcnlBZG1pbi9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/CategoryAdmin/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2F0ZWdvcnlBZG1pblxJbmRleC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/CategoryAdmin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2F0ZWdvcnlBZG1pbi9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Contact/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29udGFjdFxJbmRleC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Contact/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ29udGFjdC9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/DiscountAdmin/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGlzY291bnRBZG1pblxDcmVhdGUuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/DiscountAdmin/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGlzY291bnRBZG1pbi9DcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/DiscountAdmin/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGlzY291bnRBZG1pblxEZWxldGUuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/DiscountAdmin/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGlzY291bnRBZG1pbi9EZWxldGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/DiscountAdmin/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGlzY291bnRBZG1pblxFZGl0LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/DiscountAdmin/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGlzY291bnRBZG1pbi9FZGl0LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/DiscountAdmin/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGlzY291bnRBZG1pblxJbmRleC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/DiscountAdmin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGlzY291bnRBZG1pbi9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/CategoryManagement.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXENhdGVnb3J5TWFuYWdlbWVudC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Food/Detail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZC9EZXRhaWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXENyZWF0ZS5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Food/Order.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZC9PcmRlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/Dashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXERhc2hib2FyZC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/CategoryManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL0NhdGVnb3J5TWFuYWdlbWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXERlbGV0ZS5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL0NyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXEVkaXQuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL0Rhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXEluZGV4LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL0RlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/MenuManagement.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXE1lbnVNYW5hZ2VtZW50LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL0VkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/PromotionManagement.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXFByb21vdGlvbk1hbmFnZW1lbnQuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/FoodAdmin/Reports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZEFkbWluXFJlcG9ydHMuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/MenuManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL01lbnVNYW5hZ2VtZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Food/Detail.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZFxEZXRhaWwuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/PromotionManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL1Byb21vdGlvbk1hbmFnZW1lbnQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Food/Order.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRm9vZFxPcmRlci5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/FoodAdmin/Reports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRm9vZEFkbWluL1JlcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/News/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTmV3c1xJbmRleC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/News/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvTmV3cy9JbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/POS/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUE9TXEluZGV4LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/POS/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUE9TL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/SalesStaff/CreateOrder.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2FsZXNTdGFmZlxDcmVhdGVPcmRlci5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/SalesStaff/CreateOrder.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2FsZXNTdGFmZi9DcmVhdGVPcmRlci5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/SalesStaff/Dashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2FsZXNTdGFmZlxEYXNoYm9hcmQuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/SalesStaff/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2FsZXNTdGFmZi9EYXNoYm9hcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Shared/_AdminLayout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9BZG1pbkxheW91dC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/Shared/_AdminLayout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19BZG1pbkxheW91dC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/Create.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXENyZWF0ZS5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/Create.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL0NyZWF0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/CustomerReviews.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXEN1c3RvbWVyUmV2aWV3cy5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/CustomerReviews.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL0N1c3RvbWVyUmV2aWV3cy5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/Dashboard.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXERhc2hib2FyZC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/Dashboard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL0Rhc2hib2FyZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/Delete.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXERlbGV0ZS5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL0RlbGV0ZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXEVkaXQuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL0VkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXEluZGV4LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL0luZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/OrderManagement.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXE9yZGVyTWFuYWdlbWVudC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/OrderManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL09yZGVyTWFuYWdlbWVudC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/Reports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXFJlcG9ydHMuY3NodG1s
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/Reports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL1JlcG9ydHMuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/UserAdmin/UserManagement.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlckFkbWluXFVzZXJNYW5hZ2VtZW50LmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/UserAdmin/UserManagement.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVXNlckFkbWluL1VzZXJNYW5hZ2VtZW50LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+[/home/runner/work/Food-Order/Food-Order/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
+[/home/runner/work/Food-Order/Food-Order/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Cart/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FydFxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = b-bewwd5srd0
+[/home/runner/work/Food-Order/Food-Order/Views/Cart/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2FydC9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = b-wom9727t1x
 
-[E:/STUDY/NET1051 - Lập trình C\#5/HUNG C4 + C5/ASMC4/Asm_GD1/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-cd43rk2qk5
+[/home/runner/work/Food-Order/Food-Order/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-9h24jt21xq
