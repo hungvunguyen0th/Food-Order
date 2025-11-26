@@ -2,7 +2,7 @@
     ViewData["Title"] = "Đăng ký";
     Layout = "_Layout";
 }
-@model Asm_GD1. ViewModels.RegisterViewModel
+@model Asm_GD1.ViewModels.RegisterViewModel
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/Register.css" />
 }
@@ -23,8 +23,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Email">Email  <span style="color:orangered">*</span></label>
-                <input asp-for="Email" class="form-control" />
+                <label asp-for="Email">Email <span style="color:orangered">*</span></label>
+                <input asp-for="Email" type="email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
@@ -36,26 +36,30 @@
 
             <div class="form-group">
                 <label asp-for="Password">Mật khẩu <span style="color:orangered">*</span></label>
-                <input type="password" asp-for="Password" class="form-control" />
+                <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-               <label asp-for="ConfirmPassword">Xác nhận mật khẩu <span style="color:orangered">*</span></label>
-               <input asp-for="ConfirmPassword" type="password" class="form-control" />
-               <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                <label asp-for="ConfirmPassword">Xác nhận mật khẩu <span style="color:orangered">*</span></label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
             <div class="form-check">
-                <input type="checkbox" class="form-check-input" required>
-                <label class="form-check-label">Tôi đồng ý với <a href="#">điều khoản sử dụng</a></label>
+                <input type="checkbox" class="form-check-input" id="agreeTerms" required>
+                <label class="form-check-label" for="agreeTerms">Tôi đồng ý với <a href="#">điều khoản sử dụng</a></label>
             </div>
 
             <button type="submit" class="btn-primary">Đăng ký</button>
         </form>
 
         <div class="auth-links">
-            <p>Đã có tài khoản? <a asp-action="Login" asp-controller="Account">Đăng nhập ngay</a></p>
+            <p>Đã có tài khoản?  <a asp-action="Login" asp-controller="Account">Đăng nhập ngay</a></p>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
