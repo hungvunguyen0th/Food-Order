@@ -2,7 +2,7 @@
     ViewData["Title"] = "Đăng ký";
     Layout = "_Layout";
 }
-@model Asm_GD1.Models.Account
+@model Asm_GD1. ViewModels.RegisterViewModel
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/Register.css" />
 }
@@ -17,9 +17,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Username">Username  <span style="color:orangered">*</span></label>
-                <input asp-for="Username" class="form-control" />
-                <span asp-validation-for="Username" class="text-danger"></span>
+                <label asp-for="FullName">Họ tên <span style="color:orangered">*</span></label>
+                <input asp-for="FullName" class="form-control" />
+                <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
 
             <div class="form-group">
@@ -29,20 +29,21 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="PhoneNumber">Phone  <span style="color:orangered">*</span></label>
+                <label asp-for="PhoneNumber">Số điện thoại</label>
                 <input asp-for="PhoneNumber" class="form-control" />
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Password">Mật khẩu <span style="color:orangered">*</span></label>
-                <input asp-for="Password" class="form-control" />
+                <input type="password" asp-for="Password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label>Xác nhận mật khẩu <span style="color:orangered">*</span></label>
-                <input type="password" class="form-control" required>
+               <label asp-for="ConfirmPassword">Xác nhận mật khẩu <span style="color:orangered">*</span></label>
+               <input asp-for="ConfirmPassword" type="password" class="form-control" />
+               <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
             <div class="form-check">
