@@ -52,13 +52,13 @@ namespace Asm_GD1.Data
                 .HasOne(ci => ci.Cart)
                 .WithMany(c => c.CartItems)
                 .HasForeignKey(ci => ci.CartID)
-                .OnDelete(DeleteBehavior.Cascade); // Xóa Cart thì xóa CartItem
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(ci => ci.Product)
                 .WithMany()
                 .HasForeignKey(ci => ci.ProductID)
-                .OnDelete(DeleteBehavior.Restrict); // Không xóa Product khi xóa CartItem
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<CartItem>()
                 .HasOne(ci => ci.Size)

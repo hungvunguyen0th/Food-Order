@@ -21,13 +21,11 @@ namespace Asm_GD1.Controllers
         // ========================================
         public async Task<IActionResult> Index()
         {
-            // Lấy danh sách sản phẩm (hoặc dùng dữ liệu tĩnh)
             var products = await _context.Products
                 .Include(p => p.Category)
                 .AsNoTracking()
                 .ToListAsync();
 
-            // Nếu không có sản phẩm trong DB, tạo dữ liệu mẫu
             if (!products.Any())
             {
                 products = GetSampleProducts();
@@ -49,7 +47,6 @@ namespace Asm_GD1.Controllers
         {
             try
             {
-                // Lưu đơn hàng vào database hoặc xử lý logic
                 TempData["SuccessMessage"] = $"Đã tạo đơn hàng cho {customerName}.  Tổng tiền: {totalAmount:N0}₫";
                 return RedirectToAction("Index");
             }

@@ -65,7 +65,6 @@ namespace Asm_GD1.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateUserViewModel model)
         {
-            // ✅ DEBUG: Kiểm tra ModelState
             if (!ModelState.IsValid)
             {
                 Console.WriteLine("❌ ModelState KHÔNG HỢP LỆ:");
@@ -77,7 +76,6 @@ namespace Asm_GD1.Controllers
                 return View(model);
             }
 
-            // ✅ DEBUG: Log thông tin
             Console.WriteLine($"✅ Đang tạo user: {model.Email}");
 
             var user = new ApplicationUser
@@ -118,7 +116,6 @@ namespace Asm_GD1.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // ✅ DEBUG: Log lỗi Identity
             Console.WriteLine("❌ LỖI TẠO USER:");
             foreach (var error in result.Errors)
             {
@@ -131,7 +128,6 @@ namespace Asm_GD1.Controllers
         }
 
 
-        // ✅ EDIT GET
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
@@ -153,7 +149,6 @@ namespace Asm_GD1.Controllers
             return View(model);
         }
 
-        // ✅ EDIT POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditUserViewModel model)
