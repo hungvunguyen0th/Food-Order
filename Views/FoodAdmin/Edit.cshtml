@@ -1,0 +1,236 @@
+﻿@model Asm_GD1.Models.Product
+@using Asm_GD1.Models
+@{
+    ViewData["Title"] = "Sửa món ăn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="edit-menu-page">
+    <div class="page-header">
+        <h2><i class="fas fa-edit"></i> Chỉnh sửa món ăn</h2>
+        <p>Cập nhật thông tin món ăn: <strong>@Model.Name</strong></p>
+    </div>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data" class="menu-form">
+        <input type="hidden" asp-for="ProductID" />
+        <input type="hidden" asp-for="ImageUrl" />
+        <input type="hidden" asp-for="CreatedAt" />
+        
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <div class="form-grid">
+            <!-- Left Column -->
+            <div class="form-column">
+                <div class="form-section">
+                    <h3>Thông tin cơ bản</h3>
+                    
+                    <div class="form-group">
+                        <label asp-for="Name">Tên món ăn <span class="required">*</span></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Description">Mô tả món ăn</label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="CategoryID">Danh mục <span class="required">*</span></label>
+                            <select asp-for="CategoryID" class="form-control">
+                                @foreach (var category in ViewBag.Categories as List<Category>)
+                                {
+                                    <option value="@category.CategoryID">@category.Name</option>
+                                }
+                            </select>
+                            <span asp-validation-for="CategoryID" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="BasePrice">Giá cơ bản <span class="required">*</span></label>
+                            <input asp-for="BasePrice" type="number" class="form-control" />
+                            <span asp-validation-for="BasePrice" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Thông tin bổ sung</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label asp-for="PreparationTime">Thời gian chuẩn bị (phút)</label>
+                            <input asp-for="PreparationTime" type="number" class="form-control" />
+                        </div>
+
+                        <div class="form-group">
+                            <label asp-for="Calories">Calories</label>
+                            <input asp-for="Calories" type="number" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label>
+                            <input asp-for="IsAvailable" type="checkbox" />
+                            <span>Đang bán</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-column">
+                <div class="form-section">
+                    <h3>Hình ảnh món ăn</h3>
+                    
+                    <div class="image-upload-area" id="imageUploadArea">
+                        <div class="image-preview">
+                            <img id="previewImg" src="@Model.ImageUrl" alt="@Model.Name">
+                            <button type="button" class="remove-image" onclick="removeImage()">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <input type="file" name="ImageFile" id="imageInput" accept="image/*" style="display: none;" onchange="previewImage(this)" />
+                        <p class="image-note">Click vào ảnh để thay đổi</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="MenuManagement" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Hủy
+            </a>
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Cập nhật
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <style>
+        /* Similar styles to Create.cshtml */
+        .edit-menu-page {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .image-upload-area {
+            cursor: pointer;
+        }
+
+        .image-preview {
+            position: relative;
+            height: 300px;
+        }
+
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .image-note {
+            text-align: center;
+            margin-top: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('imageUploadArea').addEventListener('click', function() {
+            document.getElementById('imageInput').click();
+        });
+
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('previewImg').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

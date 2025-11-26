@@ -1,0 +1,206 @@
+﻿@using System.Security.Claims
+@{
+    var username = User?.FindFirstValue(ClaimTypes.Name) ?? User?.FindFirstValue(ClaimTypes.Email) ?? "Guest";
+    var userRole = User?.FindFirstValue(ClaimTypes.Role) ?? string.Empty;
+
+    var avatarClaim = User?.FindFirst("Avatar")?.Value;
+    string userAvatar;
+    if (string.IsNullOrWhiteSpace(avatarClaim))
+    {
+        userAvatar = Url.Content("~/images/user.jpg");
+    }
+    else if (avatarClaim.StartsWith("http://", StringComparison.OrdinalIgnoreCase) ||
+             avatarClaim.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+    {
+        userAvatar = avatarClaim;
+    }
+    else if (avatarClaim.StartsWith("~"))
+    {
+        userAvatar = Url.Content(avatarClaim);
+    }
+    else
+    {
+        userAvatar = Url.Content("~/" + avatarClaim.TrimStart('/'));
+    }
+
+    // ✅ KIỂM TRA CLAIMS
+    var hasManageFood = User.HasClaim("CanManageFood", "true");
+    var hasManageUser = User.HasClaim("CanManageUser", "true");
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/admin-layout.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    @RenderSection("Styles", required: false)
+</head>
+<body class="admin-body">
+    <!-- Admin Sidebar -->
+    <aside class="admin-sidebar">
+        <div class="sidebar-header">
+            <div class="admin-logo">
+                <img src="~/Images/Food-logo.jpg" alt="Logo">
+                <span>Manage Panel</span>
+            </div>
+            <button class="sidebar-toggle" onclick="toggleSidebar()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <nav class="sidebar-nav">
+            @* ✅ User Admin Menu - AdminIT hoặc UserAdmin *@
+            @if (hasManageUser)
+            {
+                <div class="nav-section">
+                    <span class="section-title">
+                        <i class="fas fa-users"></i>
+                        QUẢN LÝ USER
+                    </span>
+                    <a asp-controller="UserAdmin" asp-action="Dashboard" class="nav-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard User</span>
+                    </a>
+                    <a asp-controller="UserAdmin" asp-action="Index" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Quản lý người dùng</span>
+                    </a>
+                    <a asp-controller="UserAdmin" asp-action="OrderManagement" class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Quản lý đơn hàng</span>
+                    </a>
+                    <a asp-controller="UserAdmin" asp-action="CustomerReviews" class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Đánh giá khách hàng</span>
+                    </a>
+                    <a asp-controller="UserAdmin" asp-action="Reports" class="nav-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Báo cáo User</span>
+                    </a>
+                </div>
+            }
+
+            @* ✅ Food Admin Menu - AdminIT hoặc FoodAdmin *@
+            @if (hasManageFood)
+            {
+                <div class="nav-section">
+                    <span class="section-title">
+                        <i class="fas fa-utensils"></i>
+                        QUẢN LÝ MÓN ĂN
+                    </span>
+                    <a asp-controller="FoodAdmin" asp-action="Dashboard" class="nav-item">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard Food</span>
+                    </a>
+                    <a asp-controller="FoodAdmin" asp-action="MenuManagement" class="nav-item">
+                        <i class="fas fa-utensils"></i>
+                        <span>Quản lý thực đơn</span>
+                    </a>
+                    <a asp-controller="CategoryAdmin" asp-action="Index" class="nav-item">
+                        <i class="fas fa-list"></i>
+                        <span>Quản lý danh mục</span>
+                    </a>
+                    <a asp-controller="DiscountAdmin" asp-action="Index" class="nav-item">
+                        <i class="fas fa-tags"></i>
+                        <span>Mã giảm giá</span>
+                    </a>    
+@*                     <a asp-controller="FoodAdmin" asp-action="Reports" class="nav-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Báo cáo Food</span>
+                    </a> *@
+                </div>
+            }
+
+            @* ✅ Common Admin Functions *@
+            @if (hasManageUser || hasManageFood)
+            {
+                <div class="nav-section">
+                    <span class="section-title">
+                        <i class="fas fa-cog"></i>
+                        HỆ THỐNG
+                    </span>
+                    <a asp-controller="Home" asp-action="Index" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Trang chủ</span>
+                    </a>
+                </div>
+            }
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="admin-profile">
+                <img src="@userAvatar" alt="Admin Avatar">
+                <div class="profile-info">
+                    <span class="admin-name">@username</span>
+                    <span class="admin-role">@userRole</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <!-- Top Header -->
+        <header class="admin-header">
+            <div class="header-left">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="breadcrumb">
+                    <span>@ViewData["Title"]</span>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <button class="notification-btn">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">5</span>
+                </button>
+
+                <div class="admin-dropdown">
+                    <button class="dropdown-toggle">
+                        <img src="@userAvatar" alt="Admin Avatar">
+                        <span>@username</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user"></i>
+                            Hồ sơ
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-cog"></i>
+                            Cài đặt
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a asp-controller="Home" asp-action="Index" class="dropdown-item">
+                            <i class="fas fa-home"></i>
+                            Về trang chủ
+                        </a>
+                        <a asp-controller="Account" asp-action="Logout" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt"></i>
+                            Đăng xuất
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="admin-content">
+            @RenderBody()
+        </div>
+    </main>
+
+    <script src="~/js/site.js"></script>
+    <script src="~/js/admin.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

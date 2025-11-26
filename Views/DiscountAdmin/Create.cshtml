@@ -1,0 +1,313 @@
+﻿@model Asm_GD1.Models.Discount
+@{
+    ViewData["Title"] = "Tạo mã giảm giá";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="create-discount-page">
+    <div class="page-header">
+        <h2><i class="fas fa-tags"></i> Tạo mã giảm giá mới</h2>
+        <p>Thiết lập chương trình khuyến mãi</p>
+    </div>
+
+    <form asp-action="Create" method="post" class="discount-form">
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+        <div class="form-grid">
+            <!-- Left Column -->
+            <div class="form-section">
+                <h3>Thông tin mã giảm giá</h3>
+                
+                <div class="form-group">
+                    <label asp-for="Code">Mã giảm giá <span class="required">*</span></label>
+                    <input asp-for="Code" class="form-control" placeholder="VD: SUMMER2025" style="text-transform: uppercase;" />
+                    <span asp-validation-for="Code" class="text-danger"></span>
+                    <small class="form-hint">Mã gồm chữ và số, không dấu</small>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Description">Mô tả</label>
+                    <textarea asp-for="Description" class="form-control" rows="3" placeholder="Mô tả về chương trình khuyến mãi..."></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label asp-for="DiscountPercent">Phần trăm giảm (%) <span class="required">*</span></label>
+                        <input asp-for="DiscountPercent" type="number" class="form-control" min="0" max="100" placeholder="10" />
+                        <span asp-validation-for="DiscountPercent" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="MaxDiscountAmount">Giảm tối đa (đ)</label>
+                        <input asp-for="MaxDiscountAmount" type="number" class="form-control" placeholder="50000" />
+                        <span asp-validation-for="MaxDiscountAmount" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="MinOrderAmount">Đơn hàng tối thiểu (đ)</label>
+                    <input asp-for="MinOrderAmount" type="number" class="form-control" placeholder="100000" />
+                    <span asp-validation-for="MinOrderAmount" class="text-danger"></span>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="form-section">
+                <h3>Thời gian áp dụng</h3>
+                
+                <div class="form-group">
+                    <label asp-for="StartDate">Ngày bắt đầu <span class="required">*</span></label>
+                    <input asp-for="StartDate" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="StartDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="EndDate">Ngày kết thúc <span class="required">*</span></label>
+                    <input asp-for="EndDate" type="datetime-local" class="form-control" />
+                    <span asp-validation-for="EndDate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UsageLimit">Giới hạn lượt sử dụng</label>
+                    <input asp-for="UsageLimit" type="number" class="form-control" placeholder="100" />
+                    <span asp-validation-for="UsageLimit" class="text-danger"></span>
+                    <small class="form-hint">Để trống nếu không giới hạn</small>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <label>
+                            <input asp-for="IsActive" type="checkbox" checked />
+                            <span>Kích hoạt ngay</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="preview-box">
+                    <h4>Xem trước mã</h4>
+                    <div class="discount-preview">
+                        <div class="preview-code">
+                            <i class="fas fa-ticket-alt"></i>
+                            <span id="previewCode">DISCOUNT CODE</span>
+                        </div>
+                        <div class="preview-percent">
+                            <span id="previewPercent">10</span>%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-times"></i> Hủy
+            </a>
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-check"></i> Tạo mã giảm giá
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <style>
+        .create-discount-page {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-header h2 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .discount-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+        }
+
+        .form-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .required {
+            color: #ef4444;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #10b981;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-hint {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .preview-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .preview-box h4 {
+            margin: 0 0 1rem 0;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .discount-preview {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+        }
+
+        .preview-code {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .preview-code i {
+            font-size: 2rem;
+        }
+
+        .preview-percent {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+        }
+
+        .text-danger {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: block;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery-validation-unobtrusive@3.2.12/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        // Preview code
+        document.querySelector('input[name="Code"]').addEventListener('input', function(e) {
+            document.getElementById('previewCode').textContent = e.target.value.toUpperCase() || 'DISCOUNT CODE';
+        });
+
+        // Preview percent
+        document.querySelector('input[name="DiscountPercent"]').addEventListener('input', function(e) {
+            document.getElementById('previewPercent').textContent = e.target.value || '10';
+        });
+    </script>
+}

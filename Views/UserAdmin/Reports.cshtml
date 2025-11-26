@@ -1,0 +1,345 @@
+﻿@{
+    ViewData["Title"] = "Báo cáo tổng hợp";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin-reports.css" />
+}
+
+<div class="admin-reports">
+    <div class="page-header">
+        <h1>Báo cáo tổng hợp</h1>
+        <div class="header-actions">
+            <select id="reportPeriod" onchange="updateReportPeriod()">
+                <option value="today">Hôm nay</option>
+                <option value="yesterday">Hôm qua</option>
+                <option value="week" selected>7 ngày qua</option>
+                <option value="month">30 ngày qua</option>
+                <option value="quarter">3 tháng qua</option>
+                <option value="year">12 tháng qua</option>
+            </select>
+            <button class="btn-export" onclick="exportReport()">
+                <i class="fas fa-download"></i>
+                Xuất báo cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="metrics-grid">
+        <div class="metric-card revenue">
+            <div class="metric-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="metric-content">
+                <h3>25.8M VNĐ</h3>
+                <p>Doanh thu</p>
+                <span class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +12.5% so với tuần trước
+                </span>
+            </div>
+        </div>
+
+        <div class="metric-card orders">
+            <div class="metric-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="metric-content">
+                <h3>1,247</h3>
+                <p>Đơn hàng</p>
+                <span class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +8.3% so với tuần trước
+                </span>
+            </div>
+        </div>
+
+        <div class="metric-card customers">
+            <div class="metric-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="metric-content">
+                <h3>892</h3>
+                <p>Khách hàng</p>
+                <span class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +15.2% so với tuần trước
+                </span>
+            </div>
+        </div>
+
+        <div class="metric-card avg-order">
+            <div class="metric-icon">
+                <i class="fas fa-receipt"></i>
+            </div>
+            <div class="metric-content">
+                <h3>207K VNĐ</h3>
+                <p>Giá trị TB/đơn</p>
+                <span class="metric-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    +3.7% so với tuần trước
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Doanh thu theo ngày</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" onclick="switchChart('revenue', 'daily')">Ngày</button>
+                    <button class="chart-btn" onclick="switchChart('revenue', 'weekly')">Tuần</button>
+                    <button class="chart-btn" onclick="switchChart('revenue', 'monthly')">Tháng</button>
+                </div>
+            </div>
+            <div class="chart-content">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Đơn hàng theo trạng thái</h3>
+            </div>
+            <div class="chart-content">
+                <canvas id="orderStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Reports -->
+    <div class="reports-tabs">
+        <div class="tab-headers">
+            <button class="tab-btn active" onclick="showReportTab('performance')">Hiệu suất</button>
+            <button class="tab-btn" onclick="showReportTab('customer')">Khách hàng</button>
+            <button class="tab-btn" onclick="showReportTab('product')">Sản phẩm</button>
+            <button class="tab-btn" onclick="showReportTab('financial')">Tài chính</button>
+        </div>
+
+        <!-- Performance Report -->
+        <div class="tab-content active" id="performance">
+            <div class="report-section">
+                <h3>Hiệu suất hoạt động</h3>
+
+                <div class="performance-metrics">
+                    <div class="perf-metric">
+                        <div class="perf-label">Thời gian xử lý đơn trung bình</div>
+                        <div class="perf-value">8.5 phút</div>
+                        <div class="perf-trend positive">-1.2 phút so với tuần trước</div>
+                    </div>
+
+                    <div class="perf-metric">
+                        <div class="perf-label">Thời gian giao hàng trung bình</div>
+                        <div class="perf-value">28 phút</div>
+                        <div class="perf-trend positive">-3 phút so với tuần trước</div>
+                    </div>
+
+                    <div class="perf-metric">
+                        <div class="perf-label">Tỷ lệ đơn hàng thành công</div>
+                        <div class="perf-value">96.5%</div>
+                        <div class="perf-trend positive">+2.1% so với tuần trước</div>
+                    </div>
+
+                    <div class="perf-metric">
+                        <div class="perf-label">Tỷ lệ khiếu nại</div>
+                        <div class="perf-value">1.8%</div>
+                        <div class="perf-trend positive">-0.5% so với tuần trước</div>
+                    </div>
+                </div>
+
+                <div class="performance-chart">
+                    <h4>Xu hướng hiệu suất 30 ngày</h4>
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Report -->
+        <div class="tab-content" id="customer">
+            <div class="report-section">
+                <h3>Phân tích khách hàng</h3>
+
+                <div class="customer-segments">
+                    <div class="segment-card">
+                        <h4>Khách hàng mới</h4>
+                        <div class="segment-number">245</div>
+                        <div class="segment-percent">27.5% tổng khách hàng</div>
+                        <div class="segment-trend positive">+18.3% so với tuần trước</div>
+                    </div>
+
+                    <div class="segment-card">
+                        <h4>Khách hàng quay lại</h4>
+                        <div class="segment-number">647</div>
+                        <div class="segment-percent">72.5% tổng khách hàng</div>
+                        <div class="segment-trend positive">+12.7% so với tuần trước</div>
+                    </div>
+                </div>
+
+                <div class="customer-demographics">
+                    <h4>Phân bố theo độ tuổi</h4>
+                    <canvas id="ageChart"></canvas>
+                </div>
+
+                <div class="top-customers">
+                    <h4>Top khách hàng VIP</h4>
+                    <table class="customers-table">
+                        <thead>
+                            <tr>
+                                <th>Khách hàng</th>
+                                <th>Tổng đơn</th>
+                                <th>Tổng chi tiêu</th>
+                                <th>Đơn gần nhất</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="customer-info">
+                                        <img src="~/Images/avatars/user1.jpg" alt="Avatar">
+                                        <span>Nguyễn Văn A</span>
+                                    </div>
+                                </td>
+                                <td>47 đơn</td>
+                                <td>12.5M VNĐ</td>
+                                <td>2 ngày trước</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="customer-info">
+                                        <img src="~/Images/avatars/user2.jpg" alt="Avatar">
+                                        <span>Trần Thị B</span>
+                                    </div>
+                                </td>
+                                <td>38 đơn</td>
+                                <td>9.8M VNĐ</td>
+                                <td>1 ngày trước</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="customer-info">
+                                        <img src="~/Images/avatars/user3.jpg" alt="Avatar">
+                                        <span>Lê Văn C</span>
+                                    </div>
+                                </td>
+                                <td>35 đơn</td>
+                                <td>8.2M VNĐ</td>
+                                <td>3 ngày trước</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Report -->
+        <div class="tab-content" id="product">
+            <div class="report-section">
+                <h3>Báo cáo sản phẩm</h3>
+
+                <div class="product-metrics">
+                    <div class="prod-metric">
+                        <div class="prod-label">Tổng món ăn đang bán</div>
+                        <div class="prod-value">156 món</div>
+                    </div>
+
+                    <div class="prod-metric">
+                        <div class="prod-label">Món ăn mới trong tuần</div>
+                        <div class="prod-value">8 món</div>
+                    </div>
+
+                    <div class="prod-metric">
+                        <div class="prod-label">Món ăn bán chạy nhất</div>
+                        <div class="prod-value">Cơm tấm sườn nướng</div>
+                    </div>
+                </div>
+
+                <div class="bestsellers">
+                    <h4>Top 10 món bán chạy</h4>
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Món ăn</th>
+                                <th>Danh mục</th>
+                                <th>Đã bán</th>
+                                <th>Doanh thu</th>
+                                <th>Đánh giá</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="product-info">
+                                        <img src="~/Images/com-tam.jpg" alt="Product">
+                                        <span>Cơm tấm sườn nướng</span>
+                                    </div>
+                                </td>
+                                <td>Cơm</td>
+                                <td>247 suất</td>
+                                <td>11.1M VNĐ</td>
+                                <td>
+                                    <div class="rating">
+                                        <span class="stars">★★★★★</span>
+                                        <span>4.8</span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="product-info">
+                                        <img src="~/Images/pho-bo.jpg" alt="Product">
+                                        <span>Phở bò tái</span>
+                                    </div>
+                                </td>
+                                <td>Phở</td>
+                                <td>198 suất</td>
+                                <td>12.9M VNĐ</td>
+                                <td>
+                                    <div class="rating">
+                                        <span class="stars">★★★★☆</span>
+                                        <span>4.5</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Report -->
+        <div class="tab-content" id="financial">
+            <div class="report-section">
+                <h3>Báo cáo tài chính</h3>
+
+                <div class="financial-summary">
+                    <div class="fin-card">
+                        <h4>Doanh thu thuần</h4>
+                        <div class="fin-amount">25.8M VNĐ</div>
+                        <div class="fin-change positive">+12.5%</div>
+                    </div>
+
+                    <div class="fin-card">
+                        <h4>Chi phí vận hành</h4>
+                        <div class="fin-amount">8.2M VNĐ</div>
+                        <div class="fin-change neutral">+2.1%</div>
+                    </div>
+
+                    <div class="fin-card">
+                        <h4>Lợi nhuận</h4>
+                        <div class="fin-amount">17.6M VNĐ</div>
+                        <div class="fin-change positive">+18.3%</div>
+                    </div>
+                </div>
+
+                <div class="revenue-breakdown">
+                    <h4>Phân tích doanh thu</h4>
+                    <canvas id="revenueBreakdownChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

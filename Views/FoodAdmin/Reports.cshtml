@@ -1,0 +1,230 @@
+﻿@{
+    ViewData["Title"] = "Báo cáo bán hàng";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/food-report.css" />
+}
+
+<div class="admin-page">
+    <div class="page-header">
+        <h1>Báo cáo bán hàng</h1>
+        <div class="header-actions">
+            <button class="btn-secondary" onclick="exportReport()">
+                <i class="fas fa-download"></i>
+                Xuất báo cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="filter-section">
+        <div class="date-filter">
+            <button class="date-btn active" onclick="setDateFilter('today')">Hôm nay</button>
+            <button class="date-btn" onclick="setDateFilter('week')">7 ngày</button>
+            <button class="date-btn" onclick="setDateFilter('month')">30 ngày</button>
+            <button class="date-btn" onclick="setDateFilter('custom')">Tùy chọn</button>
+        </div>
+
+        <div class="custom-date" id="customDateRange" style="display: none;">
+            <input type="date" id="fromDate">
+            <span>đến</span>
+            <input type="date" id="toDate">
+            <button class="btn-apply" onclick="applyCustomDate()">Áp dụng</button>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card revenue">
+            <div class="card-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="card-content">
+                <h3>12,500,000₫</h3>
+                <p>Doanh thu hôm nay</p>
+                <span class="change positive">+8.5%</span>
+            </div>
+        </div>
+
+        <div class="summary-card orders">
+            <div class="card-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="card-content">
+                <h3>89</h3>
+                <p>Đơn hàng hôm nay</p>
+                <span class="change positive">+12%</span>
+            </div>
+        </div>
+
+        <div class="summary-card avg-order">
+            <div class="card-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="card-content">
+                <h3>140,449₫</h3>
+                <p>Giá trị đơn TB</p>
+                <span class="change negative">-2.1%</span>
+            </div>
+        </div>
+
+        <div class="summary-card customers">
+            <div class="card-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="card-content">
+                <h3>67</h3>
+                <p>Khách hàng mới</p>
+                <span class="change positive">+15%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Doanh thu theo thời gian</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" onclick="changeChartPeriod('day')">Ngày</button>
+                    <button class="chart-btn" onclick="changeChartPeriod('week')">Tuần</button>
+                    <button class="chart-btn" onclick="changeChartPeriod('month')">Tháng</button>
+                </div>
+            </div>
+            <canvas id="revenueChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Doanh thu theo danh mục</h3>
+            </div>
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="reports-grid">
+        <div class="report-section">
+            <h3>Top món bán chạy</h3>
+            <div class="top-products">
+                <div class="product-item">
+                    <div class="product-rank">1</div>
+                    <div class="product-info">
+                        <img src="~/Images/com-tam.jpg" alt="Cơm tấm">
+                        <div>
+                            <h4>Cơm tấm sườn nướng</h4>
+                            <span class="sales">Đã bán: 47 suất</span>
+                        </div>
+                    </div>
+                    <div class="product-revenue">2,115,000₫</div>
+                </div>
+
+                <div class="product-item">
+                    <div class="product-rank">2</div>
+                    <div class="product-info">
+                        <img src="~/Images/pho-bo.jpg" alt="Phở bò">
+                        <div>
+                            <h4>Phở bò tái</h4>
+                            <span class="sales">Đã bán: 35 suất</span>
+                        </div>
+                    </div>
+                    <div class="product-revenue">2,275,000₫</div>
+                </div>
+
+                <div class="product-item">
+                    <div class="product-rank">3</div>
+                    <div class="product-info">
+                        <img src="~/Images/banh-mi-thit-nuong.jpg" alt="Bánh mì">
+                        <div>
+                            <h4>Bánh mì thịt nướng</h4>
+                            <span class="sales">Đã bán: 28 suất</span>
+                        </div>
+                    </div>
+                    <div class="product-revenue">840,000₫</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <h3>Thống kê thanh toán</h3>
+            <div class="payment-stats">
+                <div class="payment-method">
+                    <div class="method-info">
+                        <span class="method-name">Tiền mặt (COD)</span>
+                        <span class="method-percent">65%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 65%"></div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="method-info">
+                        <span class="method-name">Ví điện tử</span>
+                        <span class="method-percent">25%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 25%"></div>
+                    </div>
+                </div>
+
+                <div class="payment-method">
+                    <div class="method-info">
+                        <span class="method-name">Chuyển khoản</span>
+                        <span class="method-percent">10%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: 10%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detailed Sales Table -->
+    <div class="table-section">
+        <h3>Chi tiết bán hàng</h3>
+        <div class="table-container">
+            <table class="sales-table">
+                <thead>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Món ăn</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Doanh thu</th>
+                        <th>Khách hàng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>14:30</td>
+                        <td>Cơm tấm sườn nướng</td>
+                        <td>2</td>
+                        <td>45,000₫</td>
+                        <td>90,000₫</td>
+                        <td>Nguyễn Văn A</td>
+                    </tr>
+                    <tr>
+                        <td>14:25</td>
+                        <td>Phở bò tái</td>
+                        <td>1</td>
+                        <td>65,000₫</td>
+                        <td>65,000₫</td>
+                        <td>Trần Thị B</td>
+                    </tr>
+                    <tr>
+                        <td>14:20</td>
+                        <td>Bánh mì thịt nướng</td>
+                        <td>3</td>
+                        <td>25,000₫</td>
+                        <td>75,000₫</td>
+                        <td>Lê Văn C</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

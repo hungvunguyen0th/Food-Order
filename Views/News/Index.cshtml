@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Tin tức";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/news.css" />
+}
+
+<div class="news-page">
+    <div class="container">
+        <!-- Page Header -->
+        <section class="page-header">
+            <h1>Tin tức & Sự kiện</h1>
+            <p>Cập nhật những thông tin mới nhất từ FoodOrder</p>
+        </section>
+
+        <!-- Featured News -->
+        <section class="featured-news">
+            <h2>Tin nổi bật</h2>
+            <div class="featured-article">
+                <div class="featured-image">
+                    <img src="~/Images/news-ai.jpg" alt="Featured News">
+                    <div class="featured-badge">Nổi bật</div>
+                </div>
+                <div class="featured-content">
+                    <div class="article-meta">
+                        <span class="category">Công nghệ</span>
+                        <span class="date">15/12/2024</span>
+                    </div>
+                    <h3>FoodOrder ra mắt tính năng AI dự đoán món ăn yêu thích</h3>
+                    <p>Với công nghệ trí tuệ nhân tạo tiên tiến, FoodOrder giờ đây có thể gợi ý những món ăn phù hợp nhất với sở thích của từng khách hàng...</p>
+                    <a href="#" class="read-more">Đọc tiếp <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Categories Filter -->
+        <section class="news-filter">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-category="all">Tất cả</button>
+                <button class="filter-btn" data-category="company">Công ty</button>
+                <button class="filter-btn" data-category="technology">Công nghệ</button>
+                <button class="filter-btn" data-category="partnership">Đối tác</button>
+                <button class="filter-btn" data-category="promotion">Khuyến mãi</button>
+                <button class="filter-btn" data-category="event">Sự kiện</button>
+            </div>
+        </section>
+
+        <!-- News Grid -->
+        <section class="news-grid">
+            <div class="news-item" data-category="company">
+                <div class="news-image">
+                    <img src="~/Images/news1.jpg" alt="News 1">
+                    <div class="news-date">
+                        <span class="day">12</span>
+                        <span class="month">Dec</span>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="category">Công ty</span>
+                    </div>
+                    <h3>FoodOrder nhận giải thưởng "Startup của năm 2024"</h3>
+                    <p>Tại lễ trao giải Startup Việt Nam 2024, FoodOrder đã vinh dự nhận giải thưởng cao quý này...</p>
+                    <a href="#" class="read-more">Đọc tiếp</a>
+                </div>
+            </div>
+
+            <div class="news-item" data-category="technology">
+                <div class="news-image">
+                    <img src="~/Images/news2.jpg" alt="News 2">
+                    <div class="news-date">
+                        <span class="day">10</span>
+                        <span class="month">Dec</span>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="category">Công nghệ</span>
+                    </div>
+                    <h3>Ứng dụng blockchain trong việc truy xuất nguồn gốc thực phẩm</h3>
+                    <p>FoodOrder tiên phong áp dụng công nghệ blockchain để đảm bảo minh bạch về nguồn gốc...</p>
+                    <a href="#" class="read-more">Đọc tiếp</a>
+                </div>
+            </div>
+
+            <div class="news-item" data-category="partnership">
+                <div class="news-image">
+                    <img src="~/Images/news3.jpg" alt="News 3">
+                    <div class="news-date">
+                        <span class="day">08</span>
+                        <span class="month">Dec</span>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="category">Đối tác</span>
+                    </div>
+                    <h3>Hợp tác với 100 nhà hàng cao cấp mở rộng thực đơn</h3>
+                    <p>Trong tháng này, FoodOrder vui mừng thông báo hợp tác với 100 nhà hàng cao cấp...</p>
+                    <a href="#" class="read-more">Đọc tiếp</a>
+                </div>
+            </div>
+
+            <div class="news-item" data-category="promotion">
+                <div class="news-image">
+                    <img src="~/Images/news4.jpg" alt="News 4">
+                    <div class="news-date">
+                        <span class="day">05</span>
+                        <span class="month">Dec</span>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="category">Khuyến mãi</span>
+                    </div>
+                    <h3>Tháng 12 - Lễ hội ẩm thực với ưu đãi lên đến 50%</h3>
+                    <p>Chào đón tháng cuối năm, FoodOrder mang đến chương trình khuyến mãi lớn nhất...</p>
+                    <a href="#" class="read-more">Đọc tiếp</a>
+                </div>
+            </div>
+
+            <div class="news-item" data-category="event">
+                <div class="news-image">
+                    <img src="~/Images/news5.jpg" alt="News 5">
+                    <div class="news-date">
+                        <span class="day">01</span>
+                        <span class="month">Dec</span>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="category">Sự kiện</span>
+                    </div>
+                    <h3>Foodie Fest 2024 - Lễ hội ẩm thực lớn nhất năm</h3>
+                    <p>FoodOrder tự hào đồng tổ chức Foodie Fest 2024, quy tụ hơn 200 thương hiệu F&B...</p>
+                    <a href="#" class="read-more">Đọc tiếp</a>
+                </div>
+            </div>
+
+            <div class="news-item" data-category="company">
+                <div class="news-image">
+                    <img src="~/Images/news6.jpg" alt="News 6">
+                    <div class="news-date">
+                        <span class="day">28</span>
+                        <span class="month">Nov</span>
+                    </div>
+                </div>
+                <div class="news-content">
+                    <div class="news-meta">
+                        <span class="category">Công ty</span>
+                    </div>
+                    <h3>FoodOrder mở rộng ra 5 tỉnh thành mới</h3>
+                    <p>Tiếp tục hành trình phát triển, FoodOrder chính thức có mặt tại 5 tỉnh thành mới...</p>
+                    <a href="#" class="read-more">Đọc tiếp</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Load More -->
+        <div class="load-more">
+            <button class="btn-load-more">Xem thêm tin tức</button>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,333 @@
+﻿@{
+    ViewData["Title"] = "Dashboard - Nhân viên bán hàng";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/sales-dashboard.css" />
+}
+
+<div class="sales-dashboard">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Dashboard Bán hàng</h1>
+                <p>Chào mừng <strong>@ViewBag.UserName</strong> - Ca làm việc hôm nay</p>
+                <div class="shift-info">
+                    <span class="shift-time">Ca: 08:00 - 17:00</span>
+                    <span class="shift-status active">Đang làm việc</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <div class="current-time">
+                    <i class="fas fa-clock"></i>
+                    <span id="currentTime">14:30:25</span>
+                </div>
+                <button class="btn-refresh" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt"></i>
+                    Làm mới
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+        <div class="stat-card orders-today">
+            <div class="stat-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">23</div>
+                <div class="stat-label">Đơn hàng hôm nay</div>
+                <div class="stat-target">Mục tiêu: 30 đơn</div>
+            </div>
+            <div class="stat-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 77%"></div>
+                </div>
+                <span class="progress-text">77% hoàn thành</span>
+            </div>
+        </div>
+
+        <div class="stat-card revenue-today">
+            <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">3.2M</div>
+                <div class="stat-label">Doanh thu hôm nay</div>
+                <div class="stat-target">Mục tiêu: 4M</div>
+            </div>
+            <div class="stat-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 80%"></div>
+                </div>
+                <span class="progress-text">80% hoàn thành</span>
+            </div>
+        </div>
+
+        <div class="stat-card pending-orders">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Đơn chờ xử lý</div>
+                <div class="stat-priority high">Ưu tiên cao!</div>
+            </div>
+            <div class="stat-action">
+                <a asp-action="PendingOrders" class="btn-urgent">Xử lý ngay</a>
+            </div>
+        </div>
+
+        <div class="stat-card customers-served">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">18</div>
+                <div class="stat-label">Khách hàng đã phục vụ</div>
+                <div class="stat-change positive">+3 so với hôm qua</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        <!-- Pending Orders -->
+        <div class="dashboard-section orders-section">
+            <div class="section-header">
+                <h2>Đơn hàng chờ xử lý</h2>
+                <div class="section-actions">
+                    <button class="btn-filter" onclick="showOrderFilters()">
+                        <i class="fas fa-filter"></i>
+                        Lọc
+                    </button>
+                    <a asp-action="AllOrders" class="view-all-link">Xem tất cả</a>
+                </div>
+            </div>
+
+            <div class="orders-list" id="pendingOrdersList">
+                <div class="order-item urgent">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <span class="order-id">#DH001234</span>
+                            <span class="order-time">12 phút trước</span>
+                            <span class="priority-badge high">Khẩn cấp</span>
+                        </div>
+                        <div class="order-amount">285,000₫</div>
+                    </div>
+                    <div class="order-details">
+                        <div class="customer-info">
+                            <strong>Nguyễn Văn A</strong>
+                            <span>0123-456-789</span>
+                        </div>
+                        <div class="order-items">
+                            <span>2x Cơm tấm sườn nướng</span>
+                            <span>1x Phở bò tái</span>
+                        </div>
+                        <div class="delivery-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            123 Đường ABC, Quận 1, TP.HCM
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="btn-accept" onclick="acceptOrder('DH001234')">
+                            <i class="fas fa-check"></i>
+                            Xác nhận
+                        </button>
+                        <button class="btn-call" onclick="callCustomer('0123456789')">
+                            <i class="fas fa-phone"></i>
+                            Gọi
+                        </button>
+                        <button class="btn-view" onclick="viewOrderDetail('DH001234')">
+                            <i class="fas fa-eye"></i>
+                            Chi tiết
+                        </button>
+                    </div>
+                </div>
+
+                <div class="order-item">
+                    <div class="order-header">
+                        <div class="order-info">
+                            <span class="order-id">#DH001235</span>
+                            <span class="order-time">8 phút trước</span>
+                            <span class="priority-badge normal">Bình thường</span>
+                        </div>
+                        <div class="order-amount">125,000₫</div>
+                    </div>
+                    <div class="order-details">
+                        <div class="customer-info">
+                            <strong>Trần Thị B</strong>
+                            <span>0987-654-321</span>
+                        </div>
+                        <div class="order-items">
+                            <span>1x Bánh mì thịt nướng</span>
+                            <span>2x Nước cam</span>
+                        </div>
+                        <div class="delivery-address">
+                            <i class="fas fa-map-marker-alt"></i>
+                            456 Đường XYZ, Quận 3, TP.HCM
+                        </div>
+                    </div>
+                    <div class="order-actions">
+                        <button class="btn-accept" onclick="acceptOrder('DH001235')">
+                            <i class="fas fa-check"></i>
+                            Xác nhận
+                        </button>
+                        <button class="btn-call" onclick="callCustomer('0987654321')">
+                            <i class="fas fa-phone"></i>
+                            Gọi
+                        </button>
+                        <button class="btn-view" onclick="viewOrderDetail('DH001235')">
+                            <i class="fas fa-eye"></i>
+                            Chi tiết
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-orders" style="display: none;">
+                <div class="no-orders-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <p>Tuyệt vời! Không có đơn hàng chờ xử lý</p>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="dashboard-section actions-section">
+            <div class="section-header">
+                <h2>Hành động nhanh</h2>
+            </div>
+
+            <div class="quick-actions-grid">
+                <div class="quick-action-item">
+                    <div class="action-icon order">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Tạo đơn hàng</div>
+                        <div class="action-desc">Tạo đơn mới cho khách</div>
+                    </div>
+                    <button class="btn-action" onclick="window.location.href='@Url.Action("CreateOrder", "SalesStaff")'">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="quick-action-item">
+                    <div class="action-icon customer">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Khách hàng mới</div>
+                        <div class="action-desc">Đăng ký khách hàng</div>
+                    </div>
+                    <button class="btn-action" onclick="registerCustomer()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="quick-action-item">
+                    <div class="action-icon search">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Tra cứu đơn hàng</div>
+                        <div class="action-desc">Tìm kiếm theo mã</div>
+                    </div>
+                    <button class="btn-action" onclick="searchOrder()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="quick-action-item">
+                    <div class="action-icon report">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Báo cáo ca làm</div>
+                        <div class="action-desc">Xem thống kê</div>
+                    </div>
+                    <button class="btn-action" onclick="viewShiftReport()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activities -->
+        <div class="dashboard-section activity-section">
+            <div class="section-header">
+                <h2>Hoạt động gần đây</h2>
+            </div>
+
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon confirmed">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Đã xác nhận đơn hàng <strong>#DH001230</strong></div>
+                        <div class="activity-meta">2 phút trước • Nguyễn Văn C • 180,000₫</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon called">
+                        <i class="fas fa-phone"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Đã gọi cho khách hàng <strong>Trần Thị D</strong></div>
+                        <div class="activity-meta">5 phút trước • Xác nhận địa chỉ giao hàng</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon created">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Tạo đơn hàng mới <strong>#DH001229</strong></div>
+                        <div class="activity-meta">8 phút trước • Lê Văn E • 95,000₫</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon customer-registered">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Đăng ký khách hàng mới <strong>Phạm Thị F</strong></div>
+                        <div class="activity-meta">12 phút trước • 0369-258-147</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Performance Chart -->
+    <div class="chart-section">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Hiệu suất bán hàng hôm nay</h3>
+                <div class="chart-legend">
+                    <span class="legend-item target">
+                        <span class="legend-color"></span>Mục tiêu
+                    </span>
+                    <span class="legend-item actual">
+                        <span class="legend-color"></span>Thực tế
+                    </span>
+                </div>
+            </div>
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/sales-dashboard.js"></script>
+}

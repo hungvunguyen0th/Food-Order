@@ -1,0 +1,386 @@
+﻿@model List<Asm_GD1.Models.CartItem>
+@{
+    ViewData["Title"] = "Thanh toán";
+    var totalItems = Model?.Sum(x => x.Quantity) ?? 0;
+    var subtotal = Model?.Sum(x => x.UnitPrice * x.Quantity) ?? 0;
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/checkout.css" />
+}
+
+<div class="checkout-page">
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="checkout-progress">
+            <div class="step completed">
+                <div class="step-number">1</div>
+                <span>Giỏ hàng</span>
+            </div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <span>Thông tin</span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Hoàn thành</span>
+            </div>
+        </div>
+
+        <div class="checkout-content">
+            <!-- Customer Information -->
+            <div class="checkout-main">
+                <form id="checkoutForm" asp-controller="Cart" asp-action="PlaceOrder" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <!-- Delivery Information -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-map-marker-alt"></i> Thông tin giao hàng</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="fullName">Họ và tên *</label>
+                                <input type="text" id="fullName" name="fullName" required placeholder="Nhập họ và tên">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại *</label>
+                                <input type="tel" id="phone" name="phone" required placeholder="Nhập số điện thoại">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Nhập email (không bắt buộc)">
+                        </div>
+                        <div class="form-group">
+                            <label for="address">Địa chỉ giao hàng </label>
+                            <input type="text" id="address" name="address" placeholder="Số nhà, tên đường">
+                        </div>
+
+                        <!-- Address Selection -->
+                        <div class="form-grid">
+@*                             <div class="form-group">
+                                <label for="city">Thành phố </label>
+                                <select id="city" name="city" >
+                                    <option value="">Chọn thành phố</option>
+                                    <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
+                                    <option value="Biên Hòa">Biên Hòa</option>
+                                </select>
+                            </div> *@
+                            <div class="form-group">
+                                <label for="district">Quận/Huyện </label>
+                                <select id="district" name="district" >
+                                    <option value="">Chọn quận/huyện</option>
+                                    <!-- Quận/Huyện HCM -->
+                                    <optgroup label="Thành phố Hồ Chí Minh">
+                                        <option value="Quận 1">Quận 1</option>
+                                        <option value="Quận 3">Quận 3</option>
+                                        <option value="Quận 7">Quận 7</option>
+                                        <option value="Quận 10">Quận 10</option>
+                                        <option value="Quận Bình Thạnh">Quận Bình Thạnh</option>
+                                        <option value="Quận Gò Vấp">Quận Gò Vấp</option>
+                                        <option value="Quận Tân Bình">Quận Tân Bình</option>
+                                        <option value="Quận Phú Nhuận">Quận Phú Nhuận</option>
+                                    </optgroup>
+                                    <!-- Quận/Huyện Biên Hòa -->
+                                    <optgroup label="Biên Hòa">
+                                        <option value="Long Bình">Long Bình</option>
+                                        <option value="Tân Biên">Tân Biên</option>
+                                        <option value="Trung Dũng">Trung Dũng</option>
+                                        <option value="Quyết Thắng">Quyết Thắng</option>
+                                        <option value="Tam Hiệp">Tam Hiệp</option>
+                                        <option value="Xuân Hoà">Xuân Hoà</option>
+                                        <option value="Bửu Hòa">Bửu Hòa</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ward">Phường/Xã </label>
+                            <select id="ward" name="ward">
+                                <option value="">Chọn phường/xã</option>
+                                <!-- Phường/Xã HCM -->
+                                <optgroup label="Quận 1">
+                                    <option value="Phường Bến Nghé">Phường Bến Nghé</option>
+                                    <option value="Phường Bến Thành">Phường Bến Thành</option>
+                                    <option value="Phường Cầu Kho">Phường Cầu Kho</option>
+                                    <option value="Phường Cầu Ông Lãnh">Phường Cầu Ông Lãnh</option>
+                                </optgroup>
+                                <optgroup label="Quận 3">
+                                    <option value="Phường 1">Phường 1</option>
+                                    <option value="Phường 2">Phường 2</option>
+                                    <option value="Phường 3">Phường 3</option>
+                                    <option value="Phường 4">Phường 4</option>
+                                    <option value="Phường 5">Phường 5</option>
+                                </optgroup>
+                                <optgroup label="Quận 7">
+                                    <option value="Phường Tân Thuận Đông">Phường Tân Thuận Đông</option>
+                                    <option value="Phường Tân Thuận Tây">Phường Tân Thuận Tây</option>
+                                    <option value="Phường Tân Kiểng">Phường Tân Kiểng</option>
+                                    <option value="Phường Tân Hưng">Phường Tân Hưng</option>
+                                </optgroup>
+                                <optgroup label="Quận 10">
+                                    <option value="Phường 1">Phường 1</option>
+                                    <option value="Phường 2">Phường 2</option>
+                                    <option value="Phường 3">Phường 3</option>
+                                    <option value="Phường 4">Phường 4</option>
+                                    <option value="Phường 5">Phường 5</option>
+                                </optgroup>
+                                <optgroup label="Quận Bình Thạnh">
+                                    <option value="Phường 1">Phường 1</option>
+                                    <option value="Phường 2">Phường 2</option>
+                                    <option value="Phường 3">Phường 3</option>
+                                    <option value="Phường 11">Phường 11</option>
+                                    <option value="Phường 12">Phường 12</option>
+                                </optgroup>
+                                <optgroup label="Quận Gò Vấp">
+                                    <option value="Phường 1">Phường 1</option>
+                                    <option value="Phường 3">Phường 3</option>
+                                    <option value="Phường 4">Phường 4</option>
+                                    <option value="Phường 5">Phường 5</option>
+                                    <option value="Phường 6">Phường 6</option>
+                                </optgroup>
+                                <optgroup label="Quận Tân Bình">
+                                    <option value="Phường 1">Phường 1</option>
+                                    <option value="Phường 2">Phường 2</option>
+                                    <option value="Phường 3">Phường 3</option>
+                                    <option value="Phường 4">Phường 4</option>
+                                    <option value="Phường 5">Phường 5</option>
+                                </optgroup>
+                                <optgroup label="Quận Phú Nhuận">
+                                    <option value="Phường 1">Phường 1</option>
+                                    <option value="Phường 2">Phường 2</option>
+                                    <option value="Phường 3">Phường 3</option>
+                                    <option value="Phường 4">Phường 4</option>
+                                    <option value="Phường 5">Phường 5</option>
+                                </optgroup>
+                                <!-- Phường/Xã Biên Hòa -->
+                                <optgroup label="Long Bình">
+                                    <option value="Phường Long Bình">Phường Long Bình</option>
+                                    <option value="Phường Long Bình Tân">Phường Long Bình Tân</option>
+                                    <option value="Phường Tân Biên">Phường Tân Biên</option>
+                                </optgroup>
+                                <optgroup label="Tân Biên">
+                                    <option value="Phường Tân Biên">Phường Tân Biên</option>
+                                    <option value="Phường Tân Hạnh">Phường Tân Hạnh</option>
+                                    <option value="Phường Tân Tiến">Phường Tân Tiến</option>
+                                </optgroup>
+                                <optgroup label="Trung Dũng">
+                                    <option value="Phường Trung Dũng">Phường Trung Dũng</option>
+                                    <option value="Phường An Bình">Phường An Bình</option>
+                                    <option value="Phường Bửu Long">Phường Bửu Long</option>
+                                </optgroup>
+                                <optgroup label="Quyết Thắng">
+                                    <option value="Phường Quyết Thắng">Phường Quyết Thắng</option>
+                                    <option value="Phường Tam Hiệp">Phường Tam Hiệp</option>
+                                    <option value="Phường Hiệp Hòa">Phường Hiệp Hòa</option>
+                                </optgroup>
+                                <optgroup label="Tam Hiệp">
+                                    <option value="Phường Tam Hiệp">Phường Tam Hiệp</option>
+                                    <option value="Phường Long Bình Tân">Phường Long Bình Tân</option>
+                                    <option value="Phường An Bình">Phường An Bình</option>
+                                </optgroup>
+                                <optgroup label="Xuân Hoà">
+                                    <option value="Phường Xuân Hoà">Phường Xuân Hoà</option>
+                                    <option value="Phường Bình Đa">Phường Bình Đa</option>
+                                    <option value="Phường Tân Hạnh">Phường Tân Hạnh</option>
+                                </optgroup>
+                                <optgroup label="Bửu Hòa">
+                                    <option value="Phường Bửu Hòa">Phường Bửu Hòa</option>
+                                    <option value="Phường Bửu Long">Phường Bửu Long</option>
+                                    <option value="Phường Long Bình Tân">Phường Long Bình Tân</option>
+                                </optgroup>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="note">Ghi chú đơn hàng</label>
+                            <textarea id="note" name="note" placeholder="Ghi chú cho người giao hàng..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Time -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-clock"></i> Thời gian</h2>
+                        <div class="delivery-time-options">
+                            <label class="time-option">
+                                <input type="radio" name="deliveryTime" value="now" checked>
+                                <div class="time-info">
+                                    <strong>Tại chỗ</strong>
+                                    <span>Chờ khoảng 15 - 20 phút (Miễn phí)</span>
+                                </div>
+                            </label>
+                            <label class="time-option">
+                                <input type="radio" name="deliveryTime" value="delivery">
+                                <div class="time-info">
+                                    <strong>Giao hàng Online</strong>
+                                    <span>Phí giao hàng 30,000₫</span>
+                                </div>
+                            </label>
+                        </div>
+                        <div class="schedule-options" id="scheduleOptions" style="display: none;">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="deliveryDate">Ngày giao</label>
+                                    <input type="date" id="deliveryDate" name="deliveryDate">
+                                </div>
+                                <div class="form-group">
+                                    <label for="deliveryTimeSlot">Khung giờ</label>
+                                    <select id="deliveryTimeSlot" name="deliveryTimeSlot">
+                                        <option value="morning">Sáng (7:00 - 11:00)</option>
+                                        <option value="afternoon">Chiều (11:00 - 16:00)</option>
+                                        <option value="evening">Tối (16:00 - 21:00)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="checkout-section">
+                        <h2><i class="fas fa-credit-card"></i> Phương thức thanh toán</h2>
+                        <div class="payment-methods">
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="cod" checked>
+                                <div class="payment-info">
+                                    <div class="payment-icon">
+                                        <i class="fas fa-money-bill-wave"></i>
+                                    </div>
+                                    <div class="payment-details">
+                                        <strong>Thanh toán bằng tiền mặt</strong>
+                                        <span>Thanh toán tại chỗ</span>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="momo">
+                                <div class="payment-info">
+                                    <div class="payment-icon">
+                                        <img src="~/Images/momo-logo.jpg" alt="MoMo">
+                                    </div>
+                                    <div class="payment-details">
+                                        <strong>Ví điện tử MoMo</strong>
+                                        <span>Thanh toán nhanh chóng qua ví MoMo</span>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="zalopay">
+                                <div class="payment-info">
+                                    <div class="payment-icon">
+                                        <img src="~/Images/zalopay-logo.jpg" alt="ZaloPay">
+                                    </div>
+                                    <div class="payment-details">
+                                        <strong>Ví điện tử ZaloPay</strong>
+                                        <span>Thanh toán an toàn với ZaloPay</span>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="payment-method">
+                                <input type="radio" name="paymentMethod" value="vnpay">
+                                <div class="payment-info">
+                                    <div class="payment-icon">
+                                        <img src="~/Images/vnpay-logo.jpg" alt="VNPAY">
+                                    </div>
+                                    <div class="payment-details">
+                                        <strong>VNPAY QR</strong>
+                                        <span>Thanh toán qua ngân hàng với VNPAY</span>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="checkout-sidebar">
+                <div class="order-summary">
+                    <h3>Đơn hàng của bạn</h3>
+                    <div class="summary-items">
+                        @if (Model != null && Model.Any())
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <div class="summary-item">
+                                    <img src="@Url.Content(item.ProductImage)" alt="@item.ProductName">
+                                    <div class="item-info">
+                                        <h4>@item.ProductName</h4>
+                                        <span class="item-options">@item.SizeName • x@(item.Quantity)</span>
+                                        @if (!string.IsNullOrEmpty(item.ToppingName))
+                                        {
+                                            <br>
+                                
+                                            <span class="topping">+ @item.ToppingName</span>
+                                        }
+                                    </div>
+                                    <span class="item-price">@((item.UnitPrice * item.Quantity).ToString("N0"))₫</span>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <div class="summary-calculations">
+                        <div class="calc-row">
+                            <span>Tạm tính (@totalItems món):</span>
+                            <span>@subtotal.ToString("N0")₫</span>
+                        </div>
+                        <div class="calc-row">
+                            <span>Phí giao hàng:</span>
+                            <span id="shippingFee">0₫</span>
+                        </div>
+                        <div class="calc-row total">
+                            <span>Tổng cộng:</span>
+                            <span id="totalAmount">@subtotal.ToString("N0")₫</span>
+                        </div>
+                    </div>
+
+                    <div class="checkout-actions">
+                        <a href="@Url.Action("Index", "Cart")" class="btn-back">
+                            <i class="fas fa-arrow-left"></i>
+                            Quay lại giỏ hàng
+                        </a>
+                        <!-- FORM SUBMIT THUẦN - KHÔNG CÓ JAVASCRIPT PHỨC TẠP -->
+                        <button type="submit" class="btn-place-order" form="checkoutForm">
+                            <i class="fas fa-check"></i>
+                            Thanh toán
+                            <span class="order-total">@subtotal.ToString("N0")₫</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // CHỈ XỬ LÝ PHÍ GIAO HÀNG - KHÔNG CÓ VALIDATION PHỨC TẠP
+        document.addEventListener('DOMContentLoaded', function() {
+            var radios = document.getElementsByName('deliveryTime');
+            var schedule = document.getElementById('scheduleOptions');
+            var fee = document.getElementById('shippingFee');
+            var total = document.getElementById('totalAmount');
+            var base = @((int)subtotal);
+
+            function update() {
+                var shipping = 0;
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked && radios[i].value === 'delivery') {
+                        shipping = 30000;
+                        if (schedule) schedule.style.display = 'block';
+                        break;
+                    }
+                }
+                if (shipping === 0 && schedule) {
+                    schedule.style.display = 'none';
+                }
+                if (fee) fee.textContent = shipping.toLocaleString('vi-VN') + '₫';
+                if (total) total.textContent = (base + shipping).toLocaleString('vi-VN') + '₫';
+            }
+
+            for (var i = 0; i < radios.length; i++) {
+                radios[i].addEventListener('change', update);
+            }
+            update();
+        });
+    </script>
+}

@@ -1,0 +1,367 @@
+﻿@model IEnumerable<Asm_GD1.Models.Discount>
+@{
+    ViewData["Title"] = "Quản lý Mã giảm giá";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="discount-management">
+    <div class="page-header">
+        <div>
+            <h1>Mã giảm giá</h1>
+            <p>Quản lý các chương trình khuyến mãi</p>
+        </div>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tạo mã giảm giá
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            @TempData["Success"]
+            <button onclick="this.parentElement.remove()">×</button>
+        </div>
+    }
+
+    <div class="discounts-grid">
+        @foreach (var discount in Model)
+        {
+            var isActive = discount.IsActive && discount.StartDate <= DateTime.Now && discount.EndDate >= DateTime.Now;
+            var isExpired = discount.EndDate < DateTime.Now;
+            var isUpcoming = discount.StartDate > DateTime.Now;
+
+            <div class="discount-card @(isActive ? "active" : isExpired ? "expired" : "")">
+                <div class="discount-header">
+                    <div class="discount-code">
+                        <i class="fas fa-ticket-alt"></i>
+                        <span>@discount.Code</span>
+                    </div>
+                    <div class="discount-status">
+                        @if (isActive)
+                        {
+                            <span class="badge badge-success">Đang hoạt động</span>
+                        }
+                        else if (isExpired)
+                        {
+                            <span class="badge badge-expired">Đã hết hạn</span>
+                        }
+                        else if (isUpcoming)
+                        {
+                            <span class="badge badge-upcoming">Sắp diễn ra</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-inactive">Không hoạt động</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="discount-body">
+                    <p class="description">@(discount.Description ?? "Không có mô tả")</p>
+                    
+                    <div class="discount-details">
+                        <div class="detail-item">
+                            <i class="fas fa-percentage"></i>
+                            <div>
+                                <span class="label">Giảm giá</span>
+                                <strong>@discount.DiscountPercent%</strong>
+                            </div>
+                        </div>
+
+                        @if (discount.MaxDiscountAmount.HasValue)
+                        {
+                            <div class="detail-item">
+                                <i class="fas fa-coins"></i>
+                                <div>
+                                    <span class="label">Giảm tối đa</span>
+                                    <strong>@discount.MaxDiscountAmount.Value.ToString("N0")đ</strong>
+                                </div>
+                            </div>
+                        }
+
+                        @if (discount.MinOrderAmount.HasValue)
+                        {
+                            <div class="detail-item">
+                                <i class="fas fa-shopping-cart"></i>
+                                <div>
+                                    <span class="label">Đơn tối thiểu</span>
+                                    <strong>@discount.MinOrderAmount.Value.ToString("N0")đ</strong>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="discount-period">
+                        <div class="period-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>@discount.StartDate.ToString("dd/MM/yyyy")</span>
+                        </div>
+                        <i class="fas fa-arrow-right"></i>
+                        <div class="period-item">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>@discount.EndDate.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    </div>
+
+                    @if (discount.UsageLimit.HasValue)
+                    {
+                        <div class="usage-info">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: @(discount.UsageLimit > 0 ? (discount.UsageCount * 100.0 / discount.UsageLimit.Value) : 0)%"></div>
+                            </div>
+                            <span class="usage-text">@discount.UsageCount / @discount.UsageLimit lượt sử dụng</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="discount-actions">
+                    <a asp-action="Edit" asp-route-id="@discount.DiscountID" class="btn-edit">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@discount.DiscountID" class="btn-delete">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                    <button onclick="toggleStatus(@discount.DiscountID)" class="btn-toggle">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .discount-management {
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .discounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .discount-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #10b981;
+        }
+
+        .discount-card.active {
+            border-left-color: #10b981;
+        }
+
+        .discount-card.expired {
+            border-left-color: #ef4444;
+            opacity: 0.7;
+        }
+
+        .discount-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+
+        .discount-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .discount-code {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .discount-code i {
+            color: #10b981;
+        }
+
+        .badge {
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge-expired {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-upcoming {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-inactive {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 1rem;
+            min-height: 2.5rem;
+        }
+
+        .discount-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 0.75rem;
+            align-items: center;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .detail-item i {
+            color: #10b981;
+            font-size: 1.5rem;
+        }
+
+        .detail-item .label {
+            display: block;
+            font-size: 0.75rem;
+            color: #666;
+        }
+
+        .discount-period {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .period-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+        }
+
+        .usage-info {
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            transition: width 0.3s;
+        }
+
+        .usage-text {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .discount-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .btn-edit, .btn-delete, .btn-toggle {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 6px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-toggle {
+            background: #6b7280;
+            color: white;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        function toggleStatus(id) {
+            if (confirm('Bạn có chắc muốn thay đổi trạng thái mã giảm giá này?')) {
+                fetch(`/DiscountAdmin/ToggleStatus/${id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }).then(response => response.json())
+                  .then(data => {
+                      if (data.success) {
+                          location.reload();
+                      }
+                  });
+            }
+        }
+    </script>
+}

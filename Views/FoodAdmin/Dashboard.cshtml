@@ -1,0 +1,394 @@
+﻿@{
+    ViewData["Title"] = "Dashboard - Quản lý Thực đơn";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/food-dashboard.css" />
+}
+
+<div class="food-dashboard">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Dashboard Quản lý Thực đơn</h1>
+                <p>Tổng quan hoạt động thực đơn và bán hàng</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-refresh" onclick="refreshFoodDashboard()">
+                    <i class="fas fa-sync-alt"></i>
+                    Làm mới
+                </button>
+                <div class="date-selector">
+                    <select id="foodDateRange" onchange="updateFoodDateRange()">
+                        <option value="today">Hôm nay</option>
+                        <option value="week" selected>7 ngày qua</option>
+                        <option value="month">30 ngày qua</option>
+                        <option value="quarter">3 tháng qua</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Grid -->
+    <div class="stats-grid">
+        <div class="stat-card menu-card">
+            <div class="stat-icon">
+                <i class="fas fa-utensils"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">156</div>
+                <div class="stat-label">Tổng món ăn</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+8 món mới tuần này</span>
+                </div>
+            </div>
+            <div class="stat-action">
+                <a asp-action="MenuManagement" class="btn-view">Xem chi tiết</a>
+            </div>
+        </div>
+
+        <div class="stat-card category-card">
+            <div class="stat-icon">
+                <i class="fas fa-tags"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">24</div>
+                <div class="stat-label">Danh mục</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-equals"></i>
+                    <span>Không thay đổi</span>
+                </div>
+            </div>
+            <div class="stat-action">
+                <a asp-action="CategoryManagement" class="btn-view">Quản lý</a>
+            </div>
+        </div>
+
+        <div class="stat-card sales-card">
+            <div class="stat-icon">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">18.5M</div>
+                <div class="stat-label">Doanh thu tuần</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15.3% so với tuần trước</span>
+                </div>
+            </div>
+            <div class="stat-action">
+                <a asp-action="SalesReport" class="btn-view">Báo cáo</a>
+            </div>
+        </div>
+
+        <div class="stat-card discount-card">
+            <div class="stat-icon">
+                <i class="fas fa-percent"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">12</div>
+                <div class="stat-label">Mã giảm giá</div>
+                <div class="stat-change warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>3 mã sắp hết hạn</span>
+                </div>
+            </div>
+            <div class="stat-action">
+                <a asp-action="DiscountManagement" class="btn-view">Kiểm tra</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-content">
+        <!-- Top Selling Items -->
+        <div class="dashboard-section bestsellers">
+            <div class="section-header">
+                <h2>Top món bán chạy</h2>
+                <div class="section-controls">
+                    <select id="bestsellerPeriod" onchange="updateBestsellers()">
+                        <option value="week">Tuần này</option>
+                        <option value="month">Tháng này</option>
+                        <option value="quarter">Quý này</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="bestseller-list">
+                <div class="bestseller-item">
+                    <div class="item-rank">1</div>
+                    <div class="item-image">
+                        <img src="~/Images/com-tam-2.jpg" alt="Cơm tấm">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Cơm tấm sườn nướng</div>
+                        <div class="item-category">Cơm</div>
+                    </div>
+                    <div class="item-stats">
+                        <div class="stat-sold">247 suất</div>
+                        <div class="stat-revenue">11.1M₫</div>
+                    </div>
+                    <div class="item-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-score">4.8</span>
+                    </div>
+                </div>
+
+                <div class="bestseller-item">
+                    <div class="item-rank">2</div>
+                    <div class="item-image">
+                        <img src="~/Images/pho-bo.jpg" alt="Phở bò">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Phở bò tái</div>
+                        <div class="item-category">Phở</div>
+                    </div>
+                    <div class="item-stats">
+                        <div class="stat-sold">198 suất</div>
+                        <div class="stat-revenue">12.9M₫</div>
+                    </div>
+                    <div class="item-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-score">4.5</span>
+                    </div>
+                </div>
+
+                <div class="bestseller-item">
+                    <div class="item-rank">3</div>
+                    <div class="item-image">
+                        <img src="~/Images/banh-mi-thit-nuong.jpg" alt="Bánh mì">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Bánh mì thịt nướng</div>
+                        <div class="item-category">Bánh mì</div>
+                    </div>
+                    <div class="item-stats">
+                        <div class="stat-sold">156 suất</div>
+                        <div class="stat-revenue">4.7M₫</div>
+                    </div>
+                    <div class="item-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-score">4.3</span>
+                    </div>
+                </div>
+
+                <div class="bestseller-item">
+                    <div class="item-rank">4</div>
+                    <div class="item-image">
+                        <img src="~/Images/bun-bo.jpg" alt="Bún bò">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Bún bò Huế</div>
+                        <div class="item-category">Bún</div>
+                    </div>
+                    <div class="item-stats">
+                        <div class="stat-sold">134 suất</div>
+                        <div class="stat-revenue">9.4M₫</div>
+                    </div>
+                    <div class="item-rating">
+                        <span class="rating-stars">★★★★★</span>
+                        <span class="rating-score">4.7</span>
+                    </div>
+                </div>
+
+                <div class="bestseller-item">
+                    <div class="item-rank">5</div>
+                    <div class="item-image">
+                        <img src="~/Images/hu-tieu-nam-vang.jpg" alt="Hủ tiếu">
+                        <img src="~/Images/hu-tieu-nam-vang.jpg" alt="Hủ tiếu">
+                    </div>
+                    <div class="item-info">
+                        <div class="item-name">Hủ tiếu Nam Vang</div>
+                        <div class="item-category">Hủ tiếu</div>
+                    </div>
+                    <div class="item-stats">
+                        <div class="stat-sold">89 suất</div>
+                        <div class="stat-revenue">5.3M₫</div>
+                    </div>
+                    <div class="item-rating">
+                        <span class="rating-stars">★★★★☆</span>
+                        <span class="rating-score">4.2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions & Alerts -->
+        <div class="dashboard-section quick-actions">
+            <div class="section-header">
+                <h2>Hành động nhanh</h2>
+            </div>
+
+            <div class="quick-actions-grid">
+                <div class="quick-action-item">
+                    <div class="action-icon add-menu">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Thêm món mới</div>
+                        <div class="action-desc">Tạo món ăn mới</div>
+                    </div>
+                    <button class="btn-action" onclick="addNewItem()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="quick-action-item">
+                    <div class="action-icon manage-category">
+                        <i class="fas fa-folder"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Quản lý danh mục</div>
+                        <div class="action-desc">Sắp xếp danh mục</div>
+                    </div>
+                    <button class="btn-action" onclick="manageCategories()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="quick-action-item">
+                    <div class="action-icon discount">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Tạo mã giảm giá</div>
+                        <div class="action-desc">Khuyến mãi mới</div>
+                    </div>
+                    <button class="btn-action" onclick="createDiscount()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="quick-action-item">
+                    <div class="action-icon report">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="action-content">
+                        <div class="action-title">Xem báo cáo</div>
+                        <div class="action-desc">Thống kê bán hàng</div>
+                    </div>
+                    <button class="btn-action" onclick="viewReports()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Alerts Section -->
+            <div class="alerts-section">
+                <h3>Cảnh báo quan trọng</h3>
+                <div class="alert-item warning">
+                    <div class="alert-icon">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">3 mã giảm giá sắp hết hạn</div>
+                        <div class="alert-desc">Cần gia hạn hoặc tạo mã mới</div>
+                    </div>
+                    <button class="btn-alert" onclick="checkExpiredDiscounts()">Kiểm tra</button>
+                </div>
+
+                <div class="alert-item info">
+                    <div class="alert-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">5 món ăn sắp hết hàng</div>
+                        <div class="alert-desc">Cần cập nhật tình trạng</div>
+                    </div>
+                    <button class="btn-alert" onclick="checkLowStock()">Xem</button>
+                </div>
+
+                <div class="alert-item success">
+                    <div class="alert-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="alert-content">
+                        <div class="alert-title">8 món mới được thêm tuần này</div>
+                        <div class="alert-desc">Hiệu suất tốt</div>
+                    </div>
+                    <button class="btn-alert" onclick="viewNewItems()">Xem</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="dashboard-section activity-section">
+            <div class="section-header">
+                <h2>Hoạt động gần đây</h2>
+            </div>
+
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon item-added">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Đã thêm món <strong>"Cơm chiên dương châu"</strong></div>
+                        <div class="activity-meta">15 phút trước • Danh mục: Cơm</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon item-updated">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Cập nhật giá <strong>"Phở bò tái"</strong></div>
+                        <div class="activity-meta">25 phút trước • 65,000₫ → 70,000₫</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon discount-created">
+                        <i class="fas fa-percent"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Tạo mã giảm giá <strong>"WEEKEND20"</strong></div>
+                        <div class="activity-meta">1 giờ trước • Giảm 20%</div>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-icon item-disabled">
+                        <i class="fas fa-eye-slash"></i>
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-main">Tạm ẩn món <strong>"Bún riêu cua"</strong></div>
+                        <div class="activity-meta">2 giờ trước • Lý do: Hết nguyên liệu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <div class="chart-container large">
+            <div class="chart-header">
+                <h3>Doanh thu theo danh mục</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" onclick="switchRevenueChart('week')">Tuần</button>
+                    <button class="chart-btn" onclick="switchRevenueChart('month')">Tháng</button>
+                    <button class="chart-btn" onclick="switchRevenueChart('quarter')">Quý</button>
+                </div>
+            </div>
+            <canvas id="categoryRevenueChart"></canvas>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Phân bố món ăn theo danh mục</h3>
+            </div>
+            <canvas id="categoryDistributionChart"></canvas>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/food-dashboard.js"></script>
+}

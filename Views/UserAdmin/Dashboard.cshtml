@@ -1,0 +1,410 @@
+﻿@{
+    ViewData["Title"] = "Dashboard - Quản lý User";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin-dashboard.css" />
+}
+
+<div class="admin-dashboard">
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="header-content">
+            <div class="header-text">
+                <h1>Dashboard Quản lý User</h1>
+                <p>Tổng quan hoạt động người dùng và đơn hàng</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-refresh" onclick="refreshDashboard()">
+                    <i class="fas fa-sync-alt"></i>
+                    Làm mới
+                </button>
+                <div class="date-selector">
+                    <select id="dateRange" onchange="updateDateRange()">
+                        <option value="today">Hôm nay</option>
+                        <option value="week">7 ngày qua</option>
+                        <option value="month" selected>30 ngày qua</option>
+                        <option value="quarter">90 ngày qua</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Cards Grid -->
+    <div class="stats-grid">
+        <div class="stat-card users-card">
+            <div class="stat-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">1,247</div>
+                <div class="stat-label">Tổng người dùng</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+8.2% so với tháng trước</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="usersChart" width="100" height="40"></canvas>
+            </div>
+        </div>
+
+        <div class="stat-card orders-card">
+            <div class="stat-icon">
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">156</div>
+                <div class="stat-label">Đơn hàng hôm nay</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+12.5% so với hôm qua</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="ordersChart" width="100" height="40"></canvas>
+            </div>
+        </div>
+
+        <div class="stat-card revenue-card">
+            <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">18.5M</div>
+                <div class="stat-label">Doanh thu tháng</div>
+                <div class="stat-change positive">
+                    <i class="fas fa-arrow-up"></i>
+                    <span>+15.3% so với tháng trước</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="revenueChart" width="100" height="40"></canvas>
+            </div>
+        </div>
+
+        <div class="stat-card satisfaction-card">
+            <div class="stat-icon">
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="stat-content">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Đánh giá trung bình</div>
+                <div class="stat-change neutral">
+                    <i class="fas fa-minus"></i>
+                    <span>Không đổi</span>
+                </div>
+            </div>
+            <div class="stat-chart">
+                <canvas id="satisfactionChart" width="100" height="40"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="dashboard-content">
+        <!-- Recent Activities -->
+        <div class="dashboard-section activity-section">
+            <div class="section-header">
+                <h2>Hoạt động gần đây</h2>
+                <a asp-action="UserManagement" class="view-all-link">
+                    Xem tất cả <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="activity-feed">
+                <div class="activity-item">
+                    <div class="activity-avatar">
+                        <img src="~/Images/avt.jpg" alt="User">
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Nguyễn Văn A</strong> đã đăng ký tài khoản mới
+                        </div>
+                        <div class="activity-time">5 phút trước</div>
+                    </div>
+                    <div class="activity-status new-user">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-avatar">
+                        <img src="~/Images/avt1.jpg" alt="User">
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Trần Thị B</strong> đã đặt đơn hàng #DH001
+                        </div>
+                        <div class="activity-time">12 phút trước</div>
+                    </div>
+                    <div class="activity-status new-order">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-avatar">
+                        <img src="~/Images/avt2.jpg" alt="User">
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Lê Văn C</strong> đã đánh giá 5 sao cho món Phở bò
+                        </div>
+                        <div class="activity-time">25 phút trước</div>
+                    </div>
+                    <div class="activity-status review">
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+
+                <div class="activity-item">
+                    <div class="activity-avatar">
+                        <img src="~/Images/avt3.jpg" alt="User">
+                    </div>
+                    <div class="activity-content">
+                        <div class="activity-text">
+                            <strong>Phạm Thị D</strong> đã hủy đơn hàng #DH002
+                        </div>
+                        <div class="activity-time">1 giờ trước</div>
+                    </div>
+                    <div class="activity-status cancelled">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="dashboard-section stats-section">
+            <div class="section-header">
+                <h2>Thống kê nhanh</h2>
+                <div class="period-selector">
+                    <button class="period-btn active" data-period="today">Hôm nay</button>
+                    <button class="period-btn" data-period="week">Tuần</button>
+                    <button class="period-btn" data-period="month">Tháng</button>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="quick-stat-item">
+                    <div class="stat-icon-small users">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value">23</div>
+                        <div class="stat-desc">User mới</div>
+                    </div>
+                </div>
+
+                <div class="quick-stat-item">
+                    <div class="stat-icon-small orders">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value">156</div>
+                        <div class="stat-desc">Đơn hàng</div>
+                    </div>
+                </div>
+
+                <div class="quick-stat-item">
+                    <div class="stat-icon-small reviews">
+                        <i class="fas fa-comment-alt"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value">89</div>
+                        <div class="stat-desc">Đánh giá</div>
+                    </div>
+                </div>
+
+                <div class="quick-stat-item">
+                    <div class="stat-icon-small support">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <div class="stat-details">
+                        <div class="stat-value">12</div>
+                        <div class="stat-desc">Hỗ trợ</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="dashboard-section orders-section">
+            <div class="section-header">
+                <h2>Đơn hàng gần đây</h2>
+                <a asp-action="OrderManagement" class="view-all-link">
+                    Xem tất cả <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="orders-table-container">
+                <table class="orders-table">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Món ăn</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Thời gian</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="order-id">#DH001</div>
+                            </td>
+                            <td>
+                                <div class="customer-info">
+                                    <img src="~/Images/avt.jpg" alt="Customer">
+                                    <span>Nguyễn Văn A</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-items">
+                                    Cơm tấm sườn nướng +2 món khác
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-amount">196,000₫</div>
+                            </td>
+                            <td>
+                                <span class="status-badge delivered">Đã giao</span>
+                            </td>
+                            <td>
+                                <div class="order-time">2 giờ trước</div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action view" onclick="viewOrder(1)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                <div class="order-id">#DH002</div>
+                            </td>
+                            <td>
+                                <div class="customer-info">
+                                    <img src="~/Images/avt1.jpg" alt="Customer">
+                                    <span>Trần Thị B</span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-items">
+                                    Phở bò tái
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-amount">65,000₫</div>
+                            </td>
+                            <td>
+                                <span class="status-badge preparing">Đang chuẩn bị</span>
+                            </td>
+                            <td>
+                                <div class="order-time">15 phút trước</div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="btn-action view" onclick="viewOrder(2)">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Top Customers -->
+        <div class="dashboard-section customers-section">
+            <div class="section-header">
+                <h2>Khách hàng VIP</h2>
+                <a asp-action="UserManagement" class="view-all-link">
+                    Xem tất cả <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="top-customers">
+                <div class="customer-item">
+                    <div class="customer-rank">1</div>
+                    <div class="customer-avatar">
+                        <img src="~/Images/avt.jpg" alt="VIP Customer">
+                    </div>
+                    <div class="customer-details">
+                        <div class="customer-name">Nguyễn Văn A</div>
+                        <div class="customer-stats">
+                            <span class="orders-count">47 đơn</span>
+                            <span class="total-spent">12.5M</span>
+                        </div>
+                    </div>
+                    <div class="customer-badge vip">VIP</div>
+                </div>
+
+                <div class="customer-item">
+                    <div class="customer-rank">2</div>
+                    <div class="customer-avatar">
+                        <img src="~/Images/avt1.jpg" alt="VIP Customer">
+                    </div>
+                    <div class="customer-details">
+                        <div class="customer-name">Trần Thị B</div>
+                        <div class="customer-stats">
+                            <span class="orders-count">38 đơn</span>
+                            <span class="total-spent">9.8M</span>
+                        </div>
+                    </div>
+                    <div class="customer-badge gold">Gold</div>
+                </div>
+
+                <div class="customer-item">
+                    <div class="customer-rank">3</div>
+                    <div class="customer-avatar">
+                        <img src="~/Images/avt2.jpg" alt="VIP Customer">
+                    </div>
+                    <div class="customer-details">
+                        <div class="customer-name">Lê Văn C</div>
+                        <div class="customer-stats">
+                            <span class="orders-count">32 đơn</span>
+                            <span class="total-spent">8.2M</span>
+                        </div>
+                    </div>
+                    <div class="customer-badge silver">Silver</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Biểu đồ đơn hàng 30 ngày</h3>
+                <div class="chart-controls">
+                    <button class="chart-btn active" data-chart="orders">Đơn hàng</button>
+                    <button class="chart-btn" data-chart="revenue">Doanh thu</button>
+                    <button class="chart-btn" data-chart="users">Người dùng</button>
+                </div>
+            </div>
+            <div class="chart-content">
+                <canvas id="mainChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Phân bố người dùng theo khu vực</h3>
+            </div>
+            <div class="chart-content">
+                <canvas id="regionChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

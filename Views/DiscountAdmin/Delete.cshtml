@@ -1,0 +1,223 @@
+﻿@model Asm_GD1.Models.Discount
+@{
+    ViewData["Title"] = "Xóa mã giảm giá";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="delete-discount-page">
+    <div class="delete-header">
+        <div class="warning-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>Xác nhận xóa mã giảm giá</h2>
+        <p>Bạn có chắc chắn muốn xóa mã giảm giá này?</p>
+    </div>
+
+    <div class="discount-card-detail">
+        <div class="discount-code-section">
+            <div class="code-display">
+                <i class="fas fa-ticket-alt"></i>
+                <span>@Model.Code</span>
+            </div>
+            <div class="discount-value">
+                <span class="percentage">@Model.DiscountPercent%</span>
+                <span class="label">Giảm giá</span>
+            </div>
+        </div>
+
+        <div class="discount-info-grid">
+            <div class="info-item">
+                <i class="fas fa-align-left"></i>
+                <div>
+                    <span class="label">Mô tả</span>
+                    <strong>@(Model.Description ?? "N/A")</strong>
+                </div>
+            </div>
+
+            @if (Model.MaxDiscountAmount.HasValue)
+            {
+                <div class="info-item">
+                    <i class="fas fa-coins"></i>
+                    <div>
+                        <span class="label">Giảm tối đa</span>
+                        <strong>@Model.MaxDiscountAmount.Value.ToString("N0")đ</strong>
+                    </div>
+                </div>
+            }
+
+            @if (Model.MinOrderAmount.HasValue)
+            {
+                <div class="info-item">
+                    <i class="fas fa-shopping-cart"></i>
+                    <div>
+                        <span class="label">Đơn tối thiểu</span>
+                        <strong>@Model.MinOrderAmount.Value.ToString("N0")đ</strong>
+                    </div>
+                </div>
+            }
+
+            <div class="info-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div>
+                    <span class="label">Thời gian</span>
+                    <strong>@Model.StartDate.ToString("dd/MM/yyyy") - @Model.EndDate.ToString("dd/MM/yyyy")</strong>
+                </div>
+            </div>
+
+            @if (Model.UsageLimit.HasValue)
+            {
+                <div class="info-item">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <span class="label">Lượt sử dụng</span>
+                        <strong>@Model.UsageCount / @Model.UsageLimit</strong>
+                    </div>
+                </div>
+            }
+
+            <div class="info-item">
+                <i class="fas fa-toggle-on"></i>
+                <div>
+                    <span class="label">Trạng thái</span>
+                    <strong>@(Model.IsActive ? "Đang hoạt động" : "Tạm dừng")</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" name="id" value="@Model.DiscountID" />
+        <div class="form-actions">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Xác nhận xóa
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <style>
+        .delete-discount-page {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .delete-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .warning-icon {
+            font-size: 5rem;
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .delete-header h2 {
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+
+        .discount-card-detail {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .discount-code-section {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            padding: 2rem;
+            border-radius: 10px;
+            color: white;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .code-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .discount-value {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .percentage {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .discount-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-item i {
+            font-size: 1.5rem;
+            color: #10b981;
+        }
+
+        .info-item .label {
+            display: block;
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+}

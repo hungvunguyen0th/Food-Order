@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Thực đơn";
+    var menuItems = ViewBag.MenuItems;
+    var currentCategory = ViewBag.CurrentCategory ?? "all";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/menu-page.css" />
+}
+
+<div class="menu-page">
+    <div class="container">
+        <!-- Header -->
+        <div class="menu-header">
+            <h1 class="menu-title">Thực đơn của chúng tôi</h1>
+            <p class="menu-subtitle">Khám phá những món ăn đặc sắc và hương vị tuyệt vời</p>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="menu-categories">
+            <button class="category-btn @(currentCategory == "all" ? "active" : "")" data-category="all">
+                <i class="fas fa-th-large"></i>
+                Tất cả
+            </button>
+            <button class="category-btn @(currentCategory == "com" ? "active" : "")" data-category="com">
+                <i class="fas fa-bowl-rice"></i>
+                Cơm
+            </button>
+            <button class="category-btn @(currentCategory == "pho" ? "active" : "")" data-category="pho">
+                <i class="fas fa-bowl-food"></i>
+                Phở
+            </button>
+            <button class="category-btn @(currentCategory == "banh-mi" ? "active" : "")" data-category="banh-mi">
+                <i class="fas fa-bread-slice"></i>
+                Bánh mì
+            </button>
+            <button class="category-btn @(currentCategory == "bun" ? "active" : "")" data-category="bun">
+                <i class="fas fa-utensils"></i>
+                Bún
+            </button>
+            <button class="category-btn @(currentCategory == "hu-tieu" ? "active" : "")" data-category="hu-tieu">
+                <i class="fas fa-seedling"></i>
+                Hủ tiếu
+            </button>
+            <button class="category-btn @(currentCategory == "do-uong" ? "active" : "")" data-category="do-uong">
+                <i class="fas fa-coffee"></i>
+                Đồ uống
+            </button>
+            <button class="category-btn @(currentCategory == "trang-mieng" ? "active" : "")" data-category="trang-mieng">
+                <i class="fas fa-ice-cream"></i>
+                Tráng miệng
+            </button>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-items-grid" id="menuGrid">
+            @foreach (var item in menuItems)
+            {
+                <div class="menu-item-card" data-category="@item.Category">
+                    <div class="menu-item-image-wrapper">
+                        <img src="@item.Image" alt="@item.Name" class="menu-item-image" onerror="this.src='/images/placeholder.jpg'">
+                        <div class="menu-item-overlay">
+                            <a href="@Url.Action("Detail", "Food", new { id = 1 })" class="btn-view-detail">
+                                <i class="fas fa-eye"></i>
+                                Xem chi tiết
+                            </a>
+                        </div>
+                    </div>
+                    <div class="menu-item-content">
+                        <h3 class="menu-item-name">@item.Name</h3>
+                        <p class="menu-item-description">@item.Description</p>
+                        <div class="menu-item-footer">
+                            <span class="menu-item-price">@String.Format("{0:#,##0}₫", item.Price)</span>
+                            <button class="btn-add-cart" onclick="addToCart('@item.Name', @item.Price)">
+                                <i class="fas fa-cart-plus"></i>
+                                Thêm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>Không tìm thấy món ăn</h3>
+            <p>Không có món ăn nào trong danh mục này</p>
+            <button class="btn-back-all" onclick="showAllItems()">
+                <i class="fas fa-arrow-left"></i>
+                Xem tất cả món
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/menu-page.js"></script>
+}

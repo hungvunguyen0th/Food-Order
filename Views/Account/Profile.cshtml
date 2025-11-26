@@ -1,0 +1,293 @@
+﻿@{
+    ViewData["Title"] = "Hồ sơ cá nhân";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/user-profile.css" />
+}
+
+<div class="profile-page">
+    <div class="container">
+        <div class="profile-layout">
+            <!-- Sidebar Menu -->
+            <div class="profile-sidebar">
+                <div class="user-info">
+                    <div class="avatar">
+                        <img src="~/Images/user.jpg" alt="Avatar" id="userAvatar">
+                        <button class="change-avatar-btn" onclick="changeAvatar()">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <h3>Nguyễn Văn A</h3>
+                    <p class="user-email">nguyenvana@email.com</p>
+                    <div class="user-stats">
+                        <div class="stat">
+                            <span class="number">24</span>
+                            <span class="label">Đơn hàng</span>
+                        </div>
+                        <div class="stat">
+                            <span class="number">12</span>
+                            <span class="label">Đánh giá</span>
+                        </div>
+                        <div class="stat">
+                            <span class="number">VIP</span>
+                            <span class="label">Hạng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="profile-nav">
+                    <a href="#profile-info" class="nav-item active" onclick="showTab('profile-info')">
+                        <i class="fas fa-user"></i>
+                        <span>Thông tin cá nhân</span>
+                    </a>
+                    <a href="#orders" class="nav-item" onclick="showTab('orders')">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Đơn hàng của tôi</span>
+                        <span class="badge">3</span>
+                    </a>
+                    <a href="#reviews" class="nav-item" onclick="showTab('reviews')">
+                        <i class="fas fa-star"></i>
+                        <span>Đánh giá của tôi</span>
+                    </a>
+                    <a href="#favorites" class="nav-item" onclick="showTab('favorites')">
+                        <i class="fas fa-heart"></i>
+                        <span>Món yêu thích</span>
+                    </a>
+                    <a href="#addresses" class="nav-item" onclick="showTab('addresses')">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Sổ địa chỉ</span>
+                    </a>
+                    <a href="#settings" class="nav-item" onclick="showTab('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>Cài đặt</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Main Content -->
+            <div class="profile-content">
+                <!-- Profile Info Tab -->
+                <div class="tab-content active" id="profile-info">
+                    <div class="content-header">
+                        <h2>Thông tin cá nhân</h2>
+                        <button class="btn-edit" onclick="toggleEdit()">
+                            <i class="fas fa-edit"></i>
+                            Chỉnh sửa
+                        </button>
+                    </div>
+
+                    <form class="profile-form" id="profileForm">
+                        <div class="form-section">
+                            <h3>Thông tin cơ bản</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Họ và tên</label>
+                                    <input type="text" value="Nguyễn Văn A" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" value="nguyenvana@email.com" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Số điện thoại</label>
+                                    <input type="tel" value="0123456789" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ngày sinh</label>
+                                    <input type="date" value="1990-01-01" readonly>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h3>Địa chỉ mặc định</h3>
+                            <div class="form-group">
+                                <label>Địa chỉ</label>
+                                <input type="text" value="123 Đường ABC, Phường 1, Quận 1, TP.HCM" readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-actions" id="formActions" style="display: none;">
+                            <button type="button" class="btn-cancel" onclick="cancelEdit()">Hủy</button>
+                            <button type="submit" class="btn-save">Lưu thay đổi</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-content" id="orders">
+                    <div class="content-header">
+                        <h2>Đơn hàng của tôi</h2>
+                        <div class="order-filters">
+                            <button class="filter-btn active" onclick="filterOrders('all')">Tất cả</button>
+                            <button class="filter-btn" onclick="filterOrders('pending')">Chờ xác nhận</button>
+                            <button class="filter-btn" onclick="filterOrders('confirmed')">Đã xác nhận</button>
+                            <button class="filter-btn" onclick="filterOrders('delivered')">Đã giao</button>
+                            <button class="filter-btn" onclick="filterOrders('cancelled')">Đã hủy</button>
+                        </div>
+                    </div>
+
+                    <div class="orders-list">
+                        <!-- Order Item 1 -->
+                        <div class="order-item" data-status="delivered">
+                            <div class="order-header">
+                                <div class="order-info">
+                                    <span class="order-id">#DH001</span>
+                                    <span class="order-date">15/12/2024</span>
+                                </div>
+                                <span class="order-status delivered">Đã giao</span>
+                            </div>
+
+                            <div class="order-items">
+                                <div class="order-food-item">
+                                    <img src="~/Images/com-tam.jpg" alt="Cơm tấm">
+                                    <div class="item-details">
+                                        <h4>Cơm tấm sườn nướng</h4>
+                                        <span class="quantity">x2</span>
+                                    </div>
+                                    <span class="item-price">116,000₫</span>
+                                </div>
+                                <div class="order-food-item">
+                                    <img src="~/Images/pho-bo.jpg" alt="Phở bò">
+                                    <div class="item-details">
+                                        <h4>Phở bò tái</h4>
+                                        <span class="quantity">x1</span>
+                                    </div>
+                                    <span class="item-price">65,000₫</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-total">
+                                    <span>Tổng: <strong>196,000₫</strong></span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-reorder" onclick="reorder(1)">Đặt lại</button>
+                                    <button class="btn-review" onclick="showReviewModal(1)">Đánh giá</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Order Item 2 -->
+                        <div class="order-item" data-status="confirmed">
+                            <div class="order-header">
+                                <div class="order-info">
+                                    <span class="order-id">#DH002</span>
+                                    <span class="order-date">16/12/2024</span>
+                                </div>
+                                <span class="order-status confirmed">Đang chuẩn bị</span>
+                            </div>
+
+                            <div class="order-items">
+                                <div class="order-food-item">
+                                    <img src="~/Images/banh-mi-thit-nuong.jpg" alt="Bánh mì">
+                                    <div class="item-details">
+                                        <h4>Bánh mì thịt nướng</h4>
+                                        <span class="quantity">x3</span>
+                                    </div>
+                                    <span class="item-price">90,000₫</span>
+                                </div>
+                            </div>
+
+                            <div class="order-footer">
+                                <div class="order-total">
+                                    <span>Tổng: <strong>105,000₫</strong></span>
+                                </div>
+                                <div class="order-actions">
+                                    <button class="btn-track" onclick="trackOrder(2)">Theo dõi</button>
+                                    <button class="btn-cancel-order" onclick="cancelOrder(2)">Hủy đơn</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reviews Tab -->
+                <div class="tab-content" id="reviews">
+                    <div class="content-header">
+                        <h2>Đánh giá của tôi</h2>
+                        <div class="review-stats">
+                            <div class="stat-item">
+                                <span class="number">12</span>
+                                <span class="label">Đánh giá</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="number">4.8</span>
+                                <span class="label">Điểm TB</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="reviews-list">
+                        <div class="review-item">
+                            <div class="review-food">
+                                <img src="~/Images/com-tam.jpg" alt="Cơm tấm">
+                                <div class="food-info">
+                                    <h4>Cơm tấm sườn nướng</h4>
+                                    <span class="review-date">15/12/2024</span>
+                                </div>
+                            </div>
+
+                            <div class="review-content">
+                                <div class="rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p>"Món ăn rất ngon, sườn nướng thơm phức, cơm tấm dẻo vừa phải. Giao hàng nhanh chóng. Sẽ đặt lại!"</p>
+                            </div>
+
+                            <div class="review-actions">
+                                <button class="btn-edit-review" onclick="editReview(1)">Sửa</button>
+                                <button class="btn-delete-review" onclick="deleteReview(1)">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other tabs (favorites, addresses, settings) would be similar... -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal" id="reviewModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Đánh giá món ăn</h3>
+            <button class="modal-close" onclick="closeReviewModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="review-food-info">
+                <img src="~/Images/com-tam.jpg" alt="Món ăn" id="reviewFoodImage">
+                <h4 id="reviewFoodName">Cơm tấm sườn nướng</h4>
+            </div>
+
+            <div class="rating-input">
+                <label>Đánh giá của bạn:</label>
+                <div class="star-rating">
+                    <i class="far fa-star" data-rating="1"></i>
+                    <i class="far fa-star" data-rating="2"></i>
+                    <i class="far fa-star" data-rating="3"></i>
+                    <i class="far fa-star" data-rating="4"></i>
+                    <i class="far fa-star" data-rating="5"></i>
+                </div>
+            </div>
+
+            <div class="review-text">
+                <label>Nhận xét:</label>
+                <textarea placeholder="Chia sẻ trải nghiệm của bạn về món ăn này..."></textarea>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeReviewModal()">Hủy</button>
+            <button class="btn-submit" onclick="submitReview()">Gửi đánh giá</button>
+        </div>
+    </div>
+</div>

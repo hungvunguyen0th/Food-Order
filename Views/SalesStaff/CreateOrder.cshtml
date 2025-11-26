@@ -1,0 +1,464 @@
+﻿@{
+    ViewData["Title"] = "Tạo đơn hàng mới";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/create-order.css" />
+}
+
+<div class="create-order-page">
+    <div class="container">
+        <!-- Progress Steps -->
+        <div class="order-progress">
+            <div class="step active">
+                <div class="step-number">1</div>
+                <span>Thông tin KH</span>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <span>Chọn món</span>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <span>Xác nhận</span>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <span>Hoàn thành</span>
+            </div>
+        </div>
+
+        <!-- Order Header -->
+        <div class="order-header">
+            <div class="order-info">
+                <h1><i class="fas fa-cash-register text-success"></i> Tạo đơn hàng mới</h1>
+                <div class="order-meta">
+                    <span class="staff-info">
+                        <i class="fas fa-user-tie"></i>
+                        Nhân viên: <strong>@ViewBag.UserName</strong>
+                    </span>
+                    <span class="current-time">
+                        <i class="fas fa-clock"></i>
+                        <span id="currentDateTime"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-outline-secondary" onclick="window.location.href='@Url.Action("Dashboard", "SalesStaff")'">
+                    <i class="fas fa-arrow-left"></i>
+                    Dashboard
+                </button>
+                <button class="btn btn-warning" onclick="clearAllOrder()">
+                    <i class="fas fa-trash-alt"></i>
+                    Xóa tất cả
+                </button>
+            </div>
+        </div>
+
+        <div class="order-content">
+            <!-- Left Side - Customer Info & Menu -->
+            <div class="order-main">
+                <form id="orderForm">
+                    <!-- Customer Information -->
+                    <div class="order-section">
+                        <h2><i class="fas fa-user-edit"></i> Thông tin khách hàng</h2>
+
+                        <div class="customer-info-grid">
+                            <div class="form-group">
+                                <label for="customerName">Tên khách hàng *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" id="customerName" name="customerName" placeholder="Nhập tên khách hàng" required>
+                                    <button type="button" class="btn-search-customer" onclick="searchExistingCustomer()" title="Tìm khách hàng cũ">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="customerPhone">Số điện thoại *</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" id="customerPhone" name="customerPhone" placeholder="Nhập số điện thoại" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="orderTime">Thời gian đặt hàng</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-clock"></i>
+                                    <input type="text" id="orderTime" name="orderTime" readonly>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="tableNumber">Số bàn</label>
+                                <div class="input-with-icon">
+                                    <i class="fas fa-chair"></i>
+                                    <select id="tableNumber" name="tableNumber">
+                                        <option value="">Chọn số bàn</option>
+                                        <option value="1">Bàn 1</option>
+                                        <option value="2">Bàn 2</option>
+                                        <option value="3">Bàn 3</option>
+                                        <option value="4">Bàn 4</option>
+                                        <option value="5">Bàn 5</option>
+                                        <option value="6">Bàn 6</option>
+                                        <option value="7">Bàn 7</option>
+                                        <option value="8">Bàn 8</option>
+                                        <option value="9">Bàn 9</option>
+                                        <option value="10">Bàn 10</option>
+                                        <option value="takeaway">Mang đi</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="orderNote">Ghi chú đơn hàng</label>
+                            <div class="input-with-icon">
+                                <i class="fas fa-sticky-note"></i>
+                                <textarea id="orderNote" name="orderNote" placeholder="Ghi chú đặc biệt cho bếp hoặc phục vụ..." rows="2"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- Discount Code Section -->
+                        <div class="discount-section">
+                            <h3><i class="fas fa-ticket-alt"></i> Mã giảm giá</h3>
+                            <div class="discount-input-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-tag"></i>
+                                        </span>
+                                        <input type="text" class="form-control" id="discountCode" placeholder="Nhập mã giảm giá">
+                                        <span class="input-group-append">
+                                            <button class="btn btn-outline-success" type="button" onclick="applyDiscountCode()">
+                                                <i class="fas fa-check"></i>
+                                                Áp dụng
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Applied Discount Display -->
+                            <div class="applied-discount" id="appliedDiscount" style="display: none;">
+                                <div class="discount-tag">
+                                    <span class="discount-info">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span id="appliedDiscountCode">WELCOME10</span>
+                                        <span id="appliedDiscountDesc">Giảm 10%</span>
+                                    </span>
+                                    <button class="btn-remove-discount" onclick="removeDiscount()" title="Xóa mã giảm giá">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Menu Selection -->
+                    <div class="order-section">
+                        <h2><i class="fas fa-utensils"></i> Chọn món ăn</h2>
+
+                        <!-- Menu Search & Categories -->
+                        <div class="menu-controls">
+                            <div class="menu-search">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="fas fa-search"></i>
+                                            <input type="text" class="form-control form-control-lg" placeholder="Tìm món ăn..." id="menuSearch">
+                                        </span>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                            <div class="menu-categories">
+                                <button class="category-btn active" data-category="all" onclick="filterCategory('all')">
+                                    <i class="fas fa-th-large"></i>
+                                    <span>Tất cả</span>
+                                </button>
+                                <button class="category-btn" data-category="com" onclick="filterCategory('com')">
+                                    <i class="fas fa-bowl-rice"></i>
+                                    <span>Cơm</span>
+                                </button>
+                                <button class="category-btn" data-category="pho" onclick="filterCategory('pho')">
+                                    <i class="fas fa-bowl-food"></i>
+                                    <span>Phở</span>
+                                </button>
+                                <button class="category-btn" data-category="banh-mi" onclick="filterCategory('banh-mi')">
+                                    <i class="fas fa-bread-slice"></i>
+                                    <span>Bánh mì</span>
+                                </button>
+                                <button class="category-btn" data-category="do-uong" onclick="filterCategory('do-uong')">
+                                    <i class="fas fa-coffee"></i>
+                                    <span>Đồ uống</span>
+                                </button>
+                                <button class="category-btn" data-category="trang-mieng" onclick="filterCategory('trang-mieng')">
+                                    <i class="fas fa-ice-cream"></i>
+                                    <span>Tráng miệng</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Menu Items -->
+                        <div class="menu-items-grid" id="menuItemsGrid">
+                            <!-- Cơm tấm sườn nướng -->
+                            <div class="menu-item-card" data-category="com" data-id="1">
+                                <div class="item-image">
+                                    <img src="~/Images/com-tam.jpg" alt="Cơm tấm sườn nướng">
+                                    <div class="item-badge bestseller">
+                                        <i class="fas fa-fire"></i>
+                                        Bán chạy
+                                    </div>
+                                    <div class="item-price">45,000₫</div>
+                                </div>
+                                <div class="item-content">
+                                    <h4 class="item-name">Cơm tấm sườn nướng</h4>
+                                    <p class="item-description">Cơm tấm thơm ngon với sườn nướng BBQ, chả trứng, bì</p>
+
+                                    <!-- Quick Add Options -->
+                                    <div class="quick-add-section">
+                                        <div class="quantity-selector">
+                                            <button type="button" class="btn-qty-minus" onclick="changeQuickQuantity(1, -1)">
+                                                <i class="fas fa-minus" style="color: white"></i>
+                                            </button>
+                                            <span class="quick-quantity" id="quickQty1">1</span>
+                                            <button type="button" class="btn-qty-plus" onclick="changeQuickQuantity(1, 1)">
+                                                <i class="fas fa-plus" style="color: white"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Extras Options -->
+                                    <div class="extras-section" id="extras1">
+                                        <h5><i class="fas fa-plus-circle"></i> Món kèm thêm:</h5>
+                                        <div class="extras-grid">
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="com-them" data-price="10000">
+                                                <span class="extra-name">Cơm thêm</span>
+                                                <span class="extra-price">+10,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="suon-them" data-price="25000">
+                                                <span class="extra-name">Sườn thêm</span>
+                                                <span class="extra-price">+25,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="cha-trung" data-price="15000">
+                                                <span class="extra-name">Chả trứng</span>
+                                                <span class="extra-price">+15,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="canh-chua" data-price="12000">
+                                                <span class="extra-name">Canh chua</span>
+                                                <span class="extra-price">+12,000₫</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-add-to-order" onclick="addToOrder(1, 'Cơm tấm sườn nướng', 45000, '~/Images/food/com-tam.jpg')">
+                                        <span class="add-text">Thêm vào đơn</span>
+                                        <span class="item-total" id="itemTotal1">45,000₫</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Phở bò tái -->
+                            <div class="menu-item-card" data-category="pho" data-id="2">
+                                <div class="item-image">
+                                    <img src="~/Images/pho-bo.jpg" alt="Phở bò tái">
+                                    <div class="item-badge hot">
+                                        <i class="fas fa-thermometer-three-quarters"></i>
+                                        Món nóng
+                                    </div>
+                                    <div class="item-price">65,000₫</div>
+                                </div>
+                                <div class="item-content">
+                                    <h4 class="item-name">Phở bò tái</h4>
+                                    <p class="item-description">Phở bò truyền thống với nước dùng trong, thịt bò tái mềm</p>
+
+                                    <div class="quick-add-section">
+                                        <div class="quantity-selector">
+                                            <button type="button" class="btn-qty-minus" onclick="changeQuickQuantity(2, -1)">
+                                                <i class="fas fa-minus" style="color: white"></i>
+                                            </button>
+                                            <span class="quick-quantity" id="quickQty2">1</span>
+                                            <button type="button" class="btn-qty-plus" onclick="changeQuickQuantity(2, 1)">
+                                                <i class="fas fa-plus" style="color: white"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="extras-section" id="extras2">
+                                        <h5><i class="fas fa-plus-circle"></i> Món kèm thêm:</h5>
+                                        <div class="extras-grid">
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="banh-pho-them" data-price="10000">
+                                                <span class="extra-name">Bánh phở thêm</span>
+                                                <span class="extra-price">+10,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="thit-bo-them" data-price="20000">
+                                                <span class="extra-name">Thịt bò thêm</span>
+                                                <span class="extra-price">+20,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="gan-bo" data-price="15000">
+                                                <span class="extra-name">Gân bò</span>
+                                                <span class="extra-price">+15,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="rau-song" data-price="5000">
+                                                <span class="extra-name">Rau sống thêm</span>
+                                                <span class="extra-price">+5,000₫</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-add-to-order" onclick="addToOrder(2, 'Phở bò tái', 65000, '~/Images/food/pho-bo.jpg')">
+                                        <span class="add-text">Thêm vào đơn</span>
+                                        <span class="item-total" id="itemTotal2">65,000₫</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Bánh mì thịt nướng -->
+                            <div class="menu-item-card" data-category="banh-mi" data-id="3">
+                                <div class="item-image">
+                                    <img src="~/Images/banh-mi-thit-nuong.jpg" alt="Bánh mì thịt nướng">
+                                    <div class="item-price">25,000₫</div>
+                                </div>
+                                <div class="item-content">
+                                    <h4 class="item-name">Bánh mì thịt nướng</h4>
+                                    <p class="item-description">Bánh mì giòn với thịt nướng thơm, pate, rau sống</p>
+
+                                    <div class="quick-add-section">
+                                        <div class="quantity-selector">
+                                            <button type="button" class="btn-qty-minus" onclick="changeQuickQuantity(3, -1)">
+                                                <i class="fas fa-minus" style="color: white"></i>
+                                            </button>
+                                            <span class="quick-quantity" id="quickQty3">1</span>
+                                            <button type="button" class="btn-qty-plus" onclick="changeQuickQuantity(3, 1)">
+                                                <i class="fas fa-plus" style="color: white"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="extras-section" id="extras3">
+                                        <h5><i class="fas fa-plus-circle"></i> Món kèm thêm:</h5>
+                                        <div class="extras-grid">
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="thit-nuong-them" data-price="15000">
+                                                <span class="extra-name">Thịt nướng thêm</span>
+                                                <span class="extra-price">+15,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="pate-them" data-price="5000">
+                                                <span class="extra-name">Pate thêm</span>
+                                                <span class="extra-price">+5,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="trung-op-la" data-price="8000">
+                                                <span class="extra-name">Trứng ốp la</span>
+                                                <span class="extra-price">+8,000₫</span>
+                                            </label>
+                                            <label class="extra-option">
+                                                <input type="checkbox" data-extra="khoai-tay-chien" data-price="15000">
+                                                <span class="extra-name">Khoai tây chiên</span>
+                                                <span class="extra-price">+15,000₫</span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <button class="btn-add-to-order" onclick="addToOrder(3, 'Bánh mì thịt nướng', 25000, '~/Images/food/banh-mi.jpg')">
+                                        <span class="add-text">Thêm vào đơn</span>
+                                        <span class="item-total" id="itemTotal3">25,000₫</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Continue with other menu items... -->
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Side - Order Summary -->
+            <div class="order-sidebar">
+                <div class="order-summary">
+                    <h3><i class="fas fa-receipt"></i> Đơn hàng của bạn</h3>
+
+                    <!-- Last Added Item -->
+                    <div class="last-added-item" id="lastAddedItem" style="display: none;">
+                        <div class="last-added-header">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <span>Vừa thêm:</span>
+                        </div>
+                        <div class="last-added-content" id="lastAddedContent">
+                            <!-- Dynamic content -->
+                        </div>
+                    </div>
+
+                    <!-- Order Items -->
+                    <div class="summary-items" id="orderItems">
+                        <div class="empty-order">
+                            <div class="empty-order-icon">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                            <p>Chưa có món nào</p>
+                            <small class="text-muted">Chọn món từ menu bên trái</small>
+                        </div>
+                    </div>
+
+                    <!-- Order Calculations -->
+                    <div class="summary-calculations" id="orderCalculations" style="display: none;">
+                        <div class="calc-row">
+                            <span>Tạm tính (<span id="totalItems">0</span> món):</span>
+                            <span id="subtotal">0₫</span>
+                        </div>
+
+                        <div class="calc-row discount" id="discountRow" style="display: none;">
+                            <span>Giảm giá (<span id="discountCodeDisplay"></span>):</span>
+                            <span id="discountAmount">-0₫</span>
+                        </div>
+
+                        <div class="calc-row total">
+                            <span>Tổng cộng:</span>
+                            <span id="finalTotal">0₫</span>
+                        </div>
+                    </div>
+
+                    <!-- Order Actions -->
+                    <div class="order-actions">
+                        <button type="button" class="btn-clear-order" onclick="clearAllOrder()">
+                            <i class="fas fa-trash"></i>
+                            Xóa đơn hàng
+                        </button>
+
+                        <button type="submit" class="btn-confirm-order" form="orderForm" id="confirmOrderBtn" disabled>
+                            <i class="fas fa-check-circle"></i>
+                            <span class="confirm-text">Xác nhận đơn hàng</span>
+                            <span class="order-total-display" id="orderTotalDisplay">0₫</span>
+                        </button>
+                    </div>
+
+                    <!-- Order Validation -->
+                    <div class="order-validation" id="orderValidation">
+                        <small class="text-muted">
+                            <i class="fas fa-info-circle"></i>
+                            <span id="validationMessage">Vui lòng nhập thông tin khách hàng và chọn món</span>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/create-order.js"></script>
+}

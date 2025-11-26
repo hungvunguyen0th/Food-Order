@@ -1,0 +1,381 @@
+﻿@model Asm_GD1.Models.Account
+@{
+    ViewData["Title"] = "Quản lý Người dùng";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/user-management.css" />
+}
+
+<div class="user-management">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Quản lý Người dùng</h1>
+            <p>Quản lý thông tin và hoạt động của người dùng</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-secondary" onclick="exportUsers()">
+                <i class="fas fa-download"></i>
+                Xuất Excel
+            </button>
+            <button class="btn-primary" onclick="showAddUserModal()">
+                <i class="fas fa-plus"></i>
+                Thêm người dùng
+            </button>
+        </div>
+    </div>
+
+    <!-- Filters & Search -->
+    <div class="filters-section">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Tìm kiếm theo tên, email, số điện thoại..." id="searchInput">
+        </div>
+
+        <div class="filter-controls">
+            <select id="statusFilter" onchange="filterUsers()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="active">Hoạt động</option>
+                <option value="inactive">Không hoạt động</option>
+                <option value="banned">Bị cấm</option>
+            </select>
+
+            <select id="roleFilter" onchange="filterUsers()">
+                <option value="">Tất cả vai trò</option>
+                <option value="customer">Khách hàng</option>
+                <option value="vip">VIP</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <input type="date" id="dateFromFilter" onchange="filterUsers()">
+            <span class="date-separator">đến</span>
+            <input type="date" id="dateToFilter" onchange="filterUsers()">
+
+            <button class="btn-filter-reset" onclick="resetFilters()">
+                <i class="fas fa-undo"></i>
+                Reset
+            </button>
+        </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="table-section">
+        <div class="table-header">
+            <div class="table-info">
+                <span class="total-count">Tổng: <strong>1,247</strong> người dùng</span>
+                <span class="filtered-count" style="display: none;">Tìm thấy: <strong>0</strong> kết quả</span>
+            </div>
+            <div class="table-actions">
+                <button class="btn-bulk-action" onclick="bulkDelete()" disabled>
+                    <i class="fas fa-trash"></i>
+                    Xóa nhiều
+                </button>
+                <button class="btn-bulk-action" onclick="bulkStatus()" disabled>
+                    <i class="fas fa-toggle-on"></i>
+                    Thay đổi trạng thái
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th>ID</th>
+                        <th>Người dùng</th>
+                        <th>Liên hệ</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Đơn hàng</th>
+                        <th>Tổng chi tiêu</th>
+                        <th>Ngày đăng ký</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <tr data-user-id="1">
+                        <td>
+                            <input type="checkbox" class="user-checkbox" value="1">
+                        </td>
+                        <td>
+                            <div class="user-id">#001</div>
+                        </td>
+                        <td>
+                            <div class="user-info">
+                                <img src="~/Images/avt.jpg" alt="User" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">Nguyễn Văn A</div>
+                                    <div class="user-username">nguyenvana</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-info">
+                                <div class="email">nguyenvana@email.com</div>
+                                <div class="phone">0123456789</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="role-badge vip">VIP</span>
+                        </td>
+                        <td>
+                            <span class="status-badge active">Hoạt động</span>
+                        </td>
+                        <td>
+                            <div class="orders-count">47</div>
+                        </td>
+                        <td>
+                            <div class="total-spent">12,500,000₫</div>
+                        </td>
+                        <td>
+                            <div class="join-date">15/03/2023</div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action view" onclick="viewUser(1)" title="Xem chi tiết">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" onclick="editUser(1)" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action delete" onclick="deleteUser(1)" title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <div class="dropdown">
+                                    <button class="btn-action more" onclick="toggleDropdown(1)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu" id="dropdown-1">
+                                        <a href="#" onclick="banUser(1)">Cấm tài khoản</a>
+                                        <a href="#" onclick="resetPassword(1)">Reset mật khẩu</a>
+                                        <a href="#" onclick="sendEmail(1)">Gửi email</a>
+                                        <a href="#" onclick="viewOrders(1)">Xem đơn hàng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr data-user-id="2">
+                        <td>
+                            <input type="checkbox" class="user-checkbox" value="2">
+                        </td>
+                        <td>
+                            <div class="user-id">#002</div>
+                        </td>
+                        <td>
+                            <div class="user-info">
+                                <img src="~/Images/avt1.jpg" alt="User" class="user-avatar">
+                                <div class="user-details">
+                                    <div class="user-name">Trần Thị B</div>
+                                    <div class="user-username">tranthib</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="contact-info">
+                                <div class="email">tranthib@email.com</div>
+                                <div class="phone">0987654321</div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="role-badge customer">Khách hàng</span>
+                        </td>
+                        <td>
+                            <span class="status-badge active">Hoạt động</span>
+                        </td>
+                        <td>
+                            <div class="orders-count">23</div>
+                        </td>
+                        <td>
+                            <div class="total-spent">5,800,000₫</div>
+                        </td>
+                        <td>
+                            <div class="join-date">28/05/2023</div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-action view" onclick="viewUser(2)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn-action edit" onclick="editUser(2)">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn-action delete" onclick="deleteUser(2)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <div class="dropdown">
+                                    <button class="btn-action more" onclick="toggleDropdown(2)">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu" id="dropdown-2">
+                                        <a href="#" onclick="banUser(2)">Cấm tài khoản</a>
+                                        <a href="#" onclick="resetPassword(2)">Reset mật khẩu</a>
+                                        <a href="#" onclick="sendEmail(2)">Gửi email</a>
+                                        <a href="#" onclick="viewOrders(2)">Xem đơn hàng</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="table-pagination">
+            <div class="pagination-info">
+                Hiển thị 1-20 trong tổng số 1,247 người dùng
+            </div>
+            <div class="pagination-controls">
+                <button class="page-btn prev" disabled>
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <span class="page-dots">...</span>
+                <button class="page-btn">63</button>
+                <button class="page-btn next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Thêm Người Dùng -->
+<div class="modal" id="addUserModal">
+    <div class="modal-content adduser-content">
+        <div class="modal-header">
+            <h3>Thêm người dùng mới</h3>
+            <button class="modal-close" onclick="closeAddUserModal()">&times;</button>
+        </div>
+        <form asp-action="Create" asp-controller="UserAdmin" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label asp-for="Username">Tên người dùng:</label>
+                    <input asp-for="Username" class="form-control" placeholder="Nhập tên người dùng" required />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email">Email:</label>
+                    <input type="email" asp-for="Email" class="form-control" placeholder="Nhập email" required>
+                </div>
+                <div class="form-group">
+                    <label asp-for="PhoneNumber">Số điện thoại:</label>
+                    <input type="tel" asp-for="PhoneNumber" class="form-control" placeholder="Nhập số điện thoại" required>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Password">Mật khẩu:</label>
+                    <input type="password" asp-for="Password" class="form-control" placeholder="Nhập mật khẩu" required>
+                </div>
+                <div class="form-group">
+                    <select asp-for="Role" class="form-select" required>
+                        <option value="" disabled selected>Chọn vai trò</option>
+                        <option value="staff">Nhân viên</option>
+                        <option value="adminit">Admin</option>
+                        <option value="admin">Quản lý User</option>
+                        <option value="admin1">Quản lý Food</option>
+                    </select>
+                    <span asp-validation-for="Role" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeAddUserModal()">Đóng</button>
+                <button type="submit" class="btn-primary">Thêm</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- User Details Modal -->
+<div class="modal" id="userDetailsModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3>Chi tiết người dùng</h3>
+            <button class="modal-close" onclick="closeModal('userDetailsModal')">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="user-details-grid">
+                <div class="user-profile-section">
+                    <div class="profile-avatar">
+                        <img src="~/Images/avt.jpg" alt="User Avatar" id="modalUserAvatar">
+                    </div>
+                    <div class="profile-info">
+                        <h3 id="modalUserName">Nguyễn Văn A</h3>
+                        <p id="modalUserEmail">nguyenvana@email.com</p>
+                        <span class="role-badge vip" id="modalUserRole">VIP</span>
+                        <span class="status-badge active" id="modalUserStatus">Hoạt động</span>
+                    </div>
+                </div>
+
+                <div class="user-stats-section">
+                    <div class="stat-item">
+                        <div class="stat-value" id="modalTotalOrders">47</div>
+                        <div class="stat-label">Tổng đơn hàng</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="modalTotalSpent">12.5M</div>
+                        <div class="stat-label">Tổng chi tiêu</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="modalAvgRating">4.8</div>
+                        <div class="stat-label">Đánh giá TB</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="user-details-tabs">
+                <div class="tab-headers">
+                    <button class="tab-btn active" onclick="showTab('orders-tab')">Đơn hàng</button>
+                    <button class="tab-btn" onclick="showTab('reviews-tab')">Đánh giá</button>
+                    <button class="tab-btn" onclick="showTab('activity-tab')">Hoạt động</button>
+                </div>
+
+                <div class="tab-contents">
+                    <div class="tab-content active" id="orders-tab">
+                        <!-- Orders content sẽ được load động -->
+                    </div>
+                    <div class="tab-content" id="reviews-tab">
+                        <!-- Reviews content sẽ được load động -->
+                    </div>
+                    <div class="tab-content" id="activity-tab">
+                        <!-- Activity content sẽ được load động -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-secondary" onclick="closeModal('userDetailsModal')">Đóng</button>
+            <button class="btn-primary" onclick="editUser()">Chỉnh sửa</button>
+        </div>
+    </div>
+</div>
+<script>
+    function showAddUserModal() {
+        document.getElementById('addUserModal').style.display = 'flex';
+    }
+
+    function closeAddUserModal() {
+        document.getElementById('addUserModal').style.display = 'none';
+    }
+
+    function validateAddUserForm() {
+        var name = document.getElementById('addUserName').value.trim();
+        var email = document.getElementById('addUserEmail').value.trim();
+        var phone = document.getElementById('addUserPhone').value.trim();
+        var password = document.getElementById('addUserPassword').value.trim();
+        var role = document.getElementById('addUserRole').value;
+
+        if (!name || !email || !phone || !password || !role) {
+            alert("Vui lòng nhập đầy đủ thông tin tất cả các trường!");
+            return false;
+        }
+        return true;
+    }
+</script>

@@ -1,0 +1,187 @@
+﻿@model IEnumerable<Asm_GD1.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "Quản lý Người dùng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/user-management.css" />
+}
+
+<div class="user-management">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="header-content">
+            <h1>Quản lý Người dùng</h1>
+            <p>Quản lý thông tin và hoạt động của người dùng</p>
+        </div>
+        <div class="header-actions">
+            <button class="btn-secondary" onclick="exportUsers()">
+                <i class="fas fa-download"></i>
+                Xuất Excel
+            </button>
+            <a asp-action="Create" class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Thêm người dùng
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters & Search -->
+    <div class="filters-section">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Tìm kiếm theo tên, email, số điện thoại..." id="searchInput">
+        </div>
+
+        <div class="filter-controls">
+            <select id="statusFilter" onchange="filterUsers()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="active">Hoạt động</option>
+                <option value="inactive">Không hoạt động</option>
+            </select>
+
+            <select id="roleFilter" onchange="filterUsers()">
+                <option value="">Tất cả vai trò</option>
+                <option value="Customer">Khách hàng</option>
+                <option value="Admin">Admin</option>
+                <option value="FoodAdmin">Food Admin</option>
+                <option value="UserAdmin">User Admin</option>
+            </select>
+
+            <button class="btn-filter-reset" onclick="resetFilters()">
+                <i class="fas fa-undo"></i>
+                Reset
+            </button>
+        </div>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            @TempData["Success"]
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            @TempData["Error"]
+            <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+        </div>
+    }
+
+    <!-- Users Table -->
+    <div class="table-section">
+        <div class="table-header">
+            <div class="table-info">
+                <span class="total-count">Tổng: <strong>@Model.Count()</strong> người dùng</span>
+            </div>
+            <div class="table-actions">
+                <button class="btn-bulk-action" onclick="bulkDelete()" disabled>
+                    <i class="fas fa-trash"></i>
+                    Xóa nhiều
+                </button>
+                <button class="btn-bulk-action" onclick="bulkStatus()" disabled>
+                    <i class="fas fa-toggle-on"></i>
+                    Thay đổi trạng thái
+                </button>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll()">
+                        </th>
+                        <th>ID</th>
+                        <th>Người dùng</th>
+                        <th>Liên hệ</th>
+                        <th>Vai trò</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày đăng ký</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    @foreach (var user in Model)
+                    {
+                        <tr data-user-id="@user.Id">
+                            <td>
+                                <input type="checkbox" class="user-checkbox" value="@user.Id">
+                            </td>
+                            <td>
+                                <div class="user-id">#@user.Id.Substring(0, 8)</div>
+                            </td>
+                            <td>
+                                <div class="user-info">
+                                    <img src="~/Images/user.jpg" alt="User" class="user-avatar">
+                                    <div class="user-details">
+                                        <div class="user-name">@user.FullName</div>
+                                        <div class="user-username">@user.Email</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="contact-info">
+                                    <div class="email">@user.Email</div>
+                                    <div class="phone">@(user.PhoneNumber ?? "N/A")</div>
+                                </div>
+                            </td>
+                            <td>
+                                @if (user.Role == "Admin")
+                                {
+                                    <span class="role-badge vip">@user.Role</span>
+                                }
+                                else if (user.Role == "FoodAdmin")
+                                {
+                                    <span class="role-badge admin">@user.Role</span>
+                                }
+                                else if (user.Role == "UserAdmin")
+                                {
+                                    <span class="role-badge admin">@user.Role</span>
+                                }
+                                else
+                                {
+                                    <span class="role-badge customer">@user.Role</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="status-badge active">Hoạt động</span>
+                            </td>
+                            <td>
+                                <div class="join-date">@user.CreatedAt.ToString("dd/MM/yyyy")</div>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <a asp-action="Edit" asp-route-id="@user.Id" class="btn-action edit" title="Chỉnh sửa">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    @if (user.Email != "adminit@gmail.com")
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn-action delete" title="Xóa">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn-action" disabled title="Không thể xóa Super Admin">
+                                            <i class="fas fa-shield-alt"></i>
+                                        </button>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/user-management.js"></script>
+}

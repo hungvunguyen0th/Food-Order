@@ -1,0 +1,241 @@
+﻿@model Asm_GD1.Models.Product
+@{
+    ViewData["Title"] = "Xóa món ăn";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="delete-menu-page">
+    <div class="delete-header">
+        <div class="warning-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2>Xác nhận xóa món ăn</h2>
+        <p>Bạn có chắc chắn muốn xóa món ăn này? Hành động này không thể hoàn tác.</p>
+    </div>
+
+    <div class="menu-details-card">
+        <div class="menu-image">
+            <img src="@Model.ImageUrl" alt="@Model.Name">
+        </div>
+        
+        <div class="menu-info">
+            <h3>@Model.Name</h3>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="label">Danh mục:</span>
+                    <span class="value">@Model.Category?.Name</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="label">Giá:</span>
+                    <span class="value price">@Model.BasePrice.ToString("N0")đ</span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="label">Trạng thái:</span>
+                    <span class="value">
+                        @if (Model.IsAvailable)
+                        {
+                            <span class="badge success">Đang bán</span>
+                        }
+                        else
+                        {
+                            <span class="badge danger">Tạm dừng</span>
+                        }
+                    </span>
+                </div>
+                
+                <div class="info-item">
+                    <span class="label">Ngày tạo:</span>
+                    <span class="value">@Model.CreatedAt.ToString("dd/MM/yyyy")</span>
+                </div>
+            </div>
+            
+            @if (!string.IsNullOrEmpty(Model.Description))
+            {
+                <div class="description">
+                    <span class="label">Mô tả:</span>
+                    <p>@Model.Description</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <form asp-action="Delete" method="post" class="delete-form">
+        <input type="hidden" name="id" value="@Model.ProductID" />
+        
+        <div class="form-actions">
+            <a asp-action="MenuManagement" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <button type="submit" class="btn btn-danger">
+                <i class="fas fa-trash"></i> Xoá
+            </button>
+        </div>
+    </form>
+</div>
+
+@section Styles {
+    <style>
+        .delete-menu-page {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+
+        .delete-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .warning-icon {
+            font-size: 5rem;
+            color: #ef4444;
+            margin-bottom: 1rem;
+        }
+
+        .delete-header h2 {
+            color: #ef4444;
+            margin-bottom: 0.5rem;
+        }
+
+        .delete-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .menu-details-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .menu-image {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .menu-info h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .info-item .label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .info-item .value {
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .price {
+            color: #ff6b35;
+            font-weight: 700;
+            font-size: 1.5rem !important;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge.success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .badge.danger {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .description {
+            padding-top: 1.5rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .description .label {
+            font-weight: 600;
+            color: #666;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .description p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+    </style>
+}

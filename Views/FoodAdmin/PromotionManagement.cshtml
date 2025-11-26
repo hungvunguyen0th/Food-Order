@@ -1,0 +1,243 @@
+﻿@{
+    ViewData["Title"] = "Quản lý mã giảm giá";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/food-promotion-management.css" />
+}
+
+<div class="admin-page">
+    <div class="page-header">
+        <h1>Quản lý mã giảm giá</h1>
+        <button class="btn-primary" onclick="showAddPromotionModal()">
+            <i class="fas fa-plus"></i>
+            Tạo mã giảm giá mới
+        </button>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <div class="filter-group">
+            <label>Trạng thái:</label>
+            <select class="filter-select" onchange="filterPromotions()">
+                <option value="all">Tất cả</option>
+                <option value="active">Đang hoạt động</option>
+                <option value="expired">Đã hết hạn</option>
+                <option value="inactive">Không hoạt động</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Loại giảm giá:</label>
+            <select class="filter-select" onchange="filterPromotions()">
+                <option value="all">Tất cả</option>
+                <option value="percentage">Phần trăm</option>
+                <option value="fixed">Số tiền cố định</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <input type="text" placeholder="Tìm theo mã..." class="search-input">
+        </div>
+    </div>
+
+    <!-- Promotions Table -->
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Mã giảm giá</th>
+                    <th>Mô tả</th>
+                    <th>Loại</th>
+                    <th>Giá trị</th>
+                    <th>Điều kiện</th>
+                    <th>Thời hạn</th>
+                    <th>Đã sử dụng</th>
+                    <th>Trạng thái</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <div class="code-cell">
+                            <strong>WELCOME10</strong>
+                            <button class="copy-btn" onclick="copyCode('WELCOME10')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>Giảm giá 10% cho khách hàng mới</td>
+                    <td><span class="type-badge percentage">Phần trăm</span></td>
+                    <td>10%</td>
+                    <td>Đơn tối thiểu 100,000₫</td>
+                    <td>
+                        <div class="date-range">
+                            <span>01/12/2024 - 31/12/2024</span>
+                            <small>Còn 15 ngày</small>
+                        </div>
+                    </td>
+                    <td>45/100</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editPromotion(1)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick="deletePromotion(1)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="code-cell">
+                            <strong>SAVE50K</strong>
+                            <button class="copy-btn" onclick="copyCode('SAVE50K')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>Giảm 50,000₫ cho đơn hàng lớn</td>
+                    <td><span class="type-badge fixed">Cố định</span></td>
+                    <td>50,000₫</td>
+                    <td>Đơn tối thiểu 500,000₫</td>
+                    <td>
+                        <div class="date-range">
+                            <span>15/11/2024 - 15/01/2025</span>
+                            <small>Còn 30 ngày</small>
+                        </div>
+                    </td>
+                    <td>12/50</td>
+                    <td><span class="status-badge active">Hoạt động</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editPromotion(2)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick="deletePromotion(2)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="code-cell">
+                            <strong>FREESHIP</strong>
+                            <button class="copy-btn" onclick="copyCode('FREESHIP')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </td>
+                    <td>Miễn phí giao hàng</td>
+                    <td><span class="type-badge fixed">Cố định</span></td>
+                    <td>15,000₫</td>
+                    <td>Đơn tối thiểu 200,000₫</td>
+                    <td>
+                        <div class="date-range">
+                            <span>01/10/2024 - 31/10/2024</span>
+                            <small class="expired">Đã hết hạn</small>
+                        </div>
+                    </td>
+                    <td>89/200</td>
+                    <td><span class="status-badge expired">Hết hạn</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn-edit" onclick="editPromotion(3)">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-delete" onclick="deletePromotion(3)">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Add/Edit Promotion Modal -->
+<div class="modal" id="promotionModal">
+    <div class="modal-content large">
+        <div class="modal-header">
+            <h3 id="promotionModalTitle">Tạo mã giảm giá mới</h3>
+            <button class="modal-close" onclick="closePromotionModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form id="promotionForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="promoCode">Mã giảm giá *</label>
+                        <input type="text" id="promoCode" required placeholder="VD: WELCOME10">
+                    </div>
+                    <div class="form-group">
+                        <label for="promoType">Loại giảm giá *</label>
+                        <select id="promoType" required onchange="toggleDiscountValue()">
+                            <option value="">Chọn loại</option>
+                            <option value="percentage">Phần trăm</option>
+                            <option value="fixed">Số tiền cố định</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="discountValue">Giá trị giảm *</label>
+                        <input type="number" id="discountValue" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxUsage">Số lần sử dụng tối đa</label>
+                        <input type="number" id="maxUsage" placeholder="VD: 100">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="promoDescription">Mô tả</label>
+                    <textarea id="promoDescription" rows="2"></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="minOrderValue">Đơn hàng tối thiểu</label>
+                        <input type="number" id="minOrderValue" placeholder="VD: 100000">
+                    </div>
+                    <div class="form-group">
+                        <label for="maxDiscountAmount">Giảm tối đa (VNĐ)</label>
+                        <input type="number" id="maxDiscountAmount" placeholder="VD: 100000">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="startDate">Ngày bắt đầu *</label>
+                        <input type="datetime-local" id="startDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">Ngày kết thúc *</label>
+                        <input type="datetime-local" id="endDate" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="promoStatus">Trạng thái</label>
+                    <select id="promoStatus">
+                        <option value="active">Hoạt động</option>
+                        <option value="inactive">Không hoạt động</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closePromotionModal()">Hủy</button>
+            <button class="btn-save" onclick="savePromotion()">Lưu mã giảm giá</button>
+        </div>
+    </div>
+</div>

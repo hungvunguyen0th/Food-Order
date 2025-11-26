@@ -1,0 +1,355 @@
+﻿@model Asm_GD1.Models.ProductViewModel
+@{
+    ViewData["Title"] = "Chi tiết món ăn";
+    var product = Model.Product.FirstOrDefault();
+    var quantity = 1;
+    var basePrice = (product!.DiscountPrice > 0)
+        ? product.DiscountPrice
+        : (product.DiscountPercent > 0
+            ? product.BasePrice * (100 - product.DiscountPercent) / 100
+            : product.BasePrice);
+
+    var defaultSize = Model.Sizes.FirstOrDefault(s => s.ExtraPrice == 0) ?? Model.Sizes.First();
+    var defaultSizeId = defaultSize.SizeID;
+
+    var defaultSizeExtra = Model.Sizes.FirstOrDefault(s => s.ExtraPrice == 0)?.ExtraPrice ?? 0;
+    var defaultToppingExtra = 0;
+    var defaultQty = 1;
+
+    var totalPrice = (basePrice + defaultSizeExtra + defaultToppingExtra) * defaultQty;
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/food-detail.css" />
+}
+
+<div class="food-detail-page">
+    <div class="container">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+            <span class="separator">></span>
+            <a asp-controller="Food" asp-action="Order">Thực đơn</a>
+            <span class="separator">></span>
+            <span class="current">@product?.Name</span>
+        </nav>
+
+        <div class="food-detail-content">
+            <!-- Hình ảnh món ăn -->
+            <div class="food-images">
+                <div class="main-image">
+                    <img src="@Url.Content(@product?.ImageUrl)" alt="@product?.Name">
+                    <div class="image-badges">
+                        <span class="badge hot">HOT</span>
+                        <span class="badge discount">-15%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin món ăn -->
+            <div class="food-info">
+                <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@product?.ProductID" />
+                    <input type="hidden" name="sizeId" id="sizeId" />
+                    <h1 class="food-title">@product?.Name</h1>
+
+                    <div class="food-rating">
+                        <div class="stars">
+                            @for (int i = 0; i < 5; i++)
+                            {
+                                if (i < Math.Floor(product?.Rating ?? 0))
+                                {
+                                    <i class="fas fa-star"></i>
+                                }
+                                else
+                                {
+                                    <i class="far fa-star"></i>
+                                }
+                            }
+                        </div>
+                        <span class="rating-score">@product?.Rating</span>
+                        <span class="sold-count">• Đã bán @product?.SoldCount</span>
+                    </div>
+
+                    <div class="food-price">
+                        @if (product?.DiscountPrice > 0)
+                        {
+                            <span class="current-price">@product.DiscountPrice.ToString("N0") VNĐ</span>
+                            <span class="original-price">@product.BasePrice.ToString("N0") VNĐ</span>
+                            <span class="discount-percent"> -@(Math.Round((1 - (product.DiscountPrice / product.BasePrice)) * 100))%</span>
+                        }
+                        else if (product?.DiscountPercent > 0)
+                        {
+                            var discountedPrice = product.BasePrice * (100 - product.DiscountPercent) / 100;
+                            <span class="current-price">@discountedPrice.ToString("N0") VNĐ</span>
+                            <span class="original-price">@product.BasePrice.ToString("N0") VNĐ</span>
+                            <span class="discount-percent">-@product.DiscountPercent%</span>
+                        }
+                        else
+                        {
+                            <span class="current-price">@product?.BasePrice.ToString("N0") VNĐ</span>
+                        }
+                    </div>
+
+
+                    <div class="food-description">
+                        <h3>Mô tả món ăn</h3>
+                        <p>@product?.Description</p>
+                    </div>
+
+                    <!-- Tùy chọn món ăn -->
+                    <div class="food-options">
+                        <div class="food-options">
+                            <div class="option-group">
+                                <h4>Kích thước</h4>
+                                <input type="hidden" name="sizeId" id="sizeId" value="@defaultSizeId" />
+                                <div class="option-buttons">
+                                    @foreach (var s in Model.Sizes)
+                                    {
+                                        var isActive = s.SizeID == defaultSizeId ? "active" : "";
+                                        <button type="button"
+                                                class="option-btn @isActive"
+                                                data-size-id="@s.SizeID"
+                                                data-extra="@s.ExtraPrice">
+                                            @s.SizeName @($"(+{s.ExtraPrice:N0} VNĐ)")
+                                        </button>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="option-group">
+                                <h4>Topping thêm</h4>
+                                <div class="topping-options">
+                                    @foreach (var topping in Model.Toppings)
+                                    {
+                                        <label class="topping-item">
+                                            <input type="checkbox" id="@topping.ToppingID" name="toppingIds" value="@topping.ToppingID" data-extra="@topping.ExtraPrice">
+                                            <span class="checkmark"></span>
+                                            <span class="topping-name">@topping.ToppingName</span>
+                                            <span class="topping-price">@($"+{topping.ExtraPrice:N0} VNĐ")</span>
+                                        </label>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="option-group">
+                                <h4>Ghi chú đặc biệt</h4>
+                                <textarea class="special-note" name="note" placeholder="Ví dụ: ít cay, không hành, thêm rau...">@product?.NoteText</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Số lượng và đặt món -->
+                    <div class="quantity-selector">
+                        <label>Số lượng:</label>
+                        <div class="quantity-controls">
+                            <button type="button" class="qty-btn minus" onclick="changeQuantity(-1)">-</button>
+                            <input type="number" class="quantity" id="quantity" name="quantity" value="@quantity" min="1" max="10" readonly>
+                            <button type="button" class="qty-btn plus" onclick="changeQuantity(1)">+</button>
+                        </div>
+                    </div>
+
+                    <div class="total-price">
+                        <span class="total-label">Tổng cộng:</span>
+                        <span class="total-amount" id="totalPrice">@totalPrice.ToString("N0") VNĐ</span>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button type="submit" class="btn-add-cart">Đặt món</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Thông tin chi tiết -->
+        <div class="detail-tabs">
+            <div class="tab-headers">
+                <button class="tab-btn active" onclick="showTab('ingredients')">Thành phần</button>
+                <button class="tab-btn" onclick="showTab('nutrition')">Dinh dưỡng</button>
+                <button class="tab-btn" onclick="showTab('reviews')">Đánh giá</button>
+            </div>
+
+            <div class="tab-contents">
+                <div class="tab-content active" id="ingredients">
+                    <h3>Thành phần món ăn</h3>
+                    <ul class="ingredients-list">
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Cơm tấm thơm dẻo</span> <span class="ingredient-weight">1,5 chén</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Sườn non nướng BBQ</span> <span class="ingredient-weight">70g</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Chả trứng tươi</span> <span class="ingredient-weight">1 miếng</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Bì giòn tan</span> <span class="ingredient-weight">20g</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Dưa chua ngọt</span> <span class="ingredient-weight">30g</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Rau thơm tươi</span> <span class="ingredient-weight">15g</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Nước mắm pha chua ngọt</span> <span class="ingredient-weight">2 muỗng</span></li>
+                        <li><i class="fas fa-check"></i> <span class="ingredient-name">Ớt tươi cắt lát</span> <span class="ingredient-weight">5g</span></li>
+                    </ul>
+                </div>
+
+                <div class="tab-content" id="nutrition">
+                    <h3>Thông tin dinh dưỡng (1 phần)</h3>
+                    <div class="nutrition-info">
+                        <div class="nutrition-item">
+                            <span class="nutrient">Calories</span>
+                            <span class="value">650 kcal</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrient">Protein</span>
+                            <span class="value">35g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrient">Carbs</span>
+                            <span class="value">75g</span>
+                        </div>
+                        <div class="nutrition-item">
+                            <span class="nutrient">Fat</span>
+                            <span class="value">18g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="reviews">
+                    <h3>Đánh giá từ khách hàng</h3>
+                    <div class="reviews-summary">
+                        <div class="rating-overview">
+                            <div class="big-rating">4.8</div>
+                            <div class="stars-big">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                            <div class="rating-text">124 đánh giá</div>
+                        </div>
+                    </div>
+
+                    <div class="review-list">
+                        <div class="review-item">
+                            <div class="review-header">
+                                <strong>Nguyễn Văn A</strong>
+                                <div class="review-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <span class="review-date">2 ngày trước</span>
+                            </div>
+                            <p class="review-text">Món ăn rất ngon, sườn nướng thơm phức, cơm tấm dẻo vừa phải. Giao hàng nhanh chóng. Sẽ đặt lại!</p>
+                        </div>
+
+                        <div class="review-item">
+                            <div class="review-header">
+                                <strong>Trần Thị B</strong>
+                                <div class="review-stars">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <span class="review-date">5 ngày trước</span>
+                            </div>
+                            <p class="review-text">Chất lượng tốt, giá cả hợp lý. Chỉ có điều hơi nhiều mỡ một chút.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Món ăn liên quan -->
+        <div class="related-products">
+            <h2>Món ăn tương tự</h2>
+            <div class="related-grid">
+                <div class="related-item">
+                    <img src="~/Images/com-ga.jpg" alt="Cơm gà nướng">
+                    <h4>Cơm gà nướng</h4>
+                    <div class="price">52,000 VNĐ</div>
+                    <button class="btn-quick-add" onclick="quickAdd(2)">Thêm nhanh</button>
+                </div>
+
+                <div class="related-item">
+                    <img src="~/Images/pho-bo.jpg" alt="Phở bò">
+                    <h4>Phở bò tái</h4>
+                    <div class="price">65,000 VNĐ</div>
+                    <button class="btn-quick-add" onclick="quickAdd(3)">Thêm nhanh</button>
+                </div>
+
+                <div class="related-item">
+                    <img src="~/Images/bun-bo.jpg" alt="Bún bò Huế">
+                    <h4>Bún bò Huế</h4>
+                    <div class="price">58,000 VNĐ</div>
+                    <button class="btn-quick-add" onclick="quickAdd(4)">Thêm nhanh</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const basePrice = @basePrice;
+
+    const toInt = (v) => {
+        const n = parseInt(v, 10);
+        return Number.isNaN(n) ? 0 : n;
+    };
+
+    function updateTotalPrice() {
+        // Lấy nút size đang active
+        const activeSizeBtn = document.querySelector('.option-buttons .option-btn.active');
+        const sizeExtra = activeSizeBtn ? toInt(activeSizeBtn.dataset.extra) : 0;
+
+        // Cộng topping
+        let toppingExtra = 0;
+        document.querySelectorAll('input[name="toppingIds"]:checked').forEach(t => {
+            toppingExtra += toInt(t.dataset.extra);
+        });
+
+        // Số lượng
+        const qty = toInt(document.getElementById('quantity').value) || 1;
+
+        // Tính tổng
+        const total = (basePrice + sizeExtra + toppingExtra) * qty;
+
+        // Cập nhật hiển thị
+        document.getElementById('totalPrice').textContent = total.toLocaleString('vi-VN') + ' VNĐ';
+    }
+
+    function changeQuantity(change) {
+        const qtyInput = document.getElementById('quantity');
+        let currentValue = parseInt(qtyInput.value);
+
+        const min = parseInt(qtyInput.min) || 1;
+        const max = parseInt(qtyInput.max) || 10;
+
+        let newValue = currentValue + change;
+        if (newValue < min) newValue = min;
+        if (newValue > max) newValue = max;
+
+        qtyInput.value = newValue;
+        updateTotalPrice();
+    }
+
+    // Lắng nghe sự kiện thay đổi size, topping
+    document.querySelector('.option-buttons').addEventListener('click', (e) => {
+        const btn = e.target.closest('.option-btn');
+        if (!btn) return;
+
+        // Bỏ active cũ, set active mới
+        document.querySelectorAll('.option-buttons .option-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        // Set hidden để submit về server
+        document.getElementById('sizeId').value = btn.dataset.sizeId;
+
+        updateTotalPrice();
+    });
+
+    document.querySelectorAll('input[name="toppingIds"]').forEach(checkbox => {
+        checkbox.addEventListener('change', updateTotalPrice);
+    });
+
+    // Khởi tạo tổng tiền khi load trang
+    updateTotalPrice();
+</script>
+

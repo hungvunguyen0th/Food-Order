@@ -1,0 +1,297 @@
+﻿@{
+    ViewData["Title"] = "Đánh giá khách hàng";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/admin-reviews.css" />
+}
+
+<div class="admin-reviews">
+    <div class="page-header">
+        <h1>Đánh giá khách hàng</h1>
+        <div class="header-actions">
+            <button class="btn-export" onclick="exportReviews()">
+                <i class="fas fa-download"></i>
+                Xuất báo cáo
+            </button>
+        </div>
+    </div>
+
+    <!-- Review Statistics -->
+    <div class="review-stats">
+        <div class="stats-overview">
+            <div class="stat-item">
+                <div class="stat-number">4.8</div>
+                <div class="stat-label">Điểm trung bình</div>
+                <div class="stat-change positive">+0.2 từ tháng trước</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">1,245</div>
+                <div class="stat-label">Tổng đánh giá</div>
+                <div class="stat-change positive">+89 từ tháng trước</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">94%</div>
+                <div class="stat-label">Tỷ lệ hài lòng</div>
+                <div class="stat-change positive">+3% từ tháng trước</div>
+            </div>
+        </div>
+
+        <div class="rating-breakdown">
+            <h3>Phân bố đánh giá</h3>
+            <div class="rating-bars">
+                <div class="rating-bar">
+                    <span class="rating-label">5 sao</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 68%"></div>
+                    </div>
+                    <span class="rating-count">847 (68%)</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="rating-label">4 sao</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 22%"></div>
+                    </div>
+                    <span class="rating-count">274 (22%)</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="rating-label">3 sao</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 7%"></div>
+                    </div>
+                    <span class="rating-count">87 (7%)</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="rating-label">2 sao</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 2%"></div>
+                    </div>
+                    <span class="rating-count">25 (2%)</span>
+                </div>
+                <div class="rating-bar">
+                    <span class="rating-label">1 sao</span>
+                    <div class="bar-container">
+                        <div class="bar-fill" style="width: 1%"></div>
+                    </div>
+                    <span class="rating-count">12 (1%)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="filters-section">
+        <div class="filter-group">
+            <label>Đánh giá:</label>
+            <select id="ratingFilter" onchange="filterReviews()">
+                <option value="">Tất cả</option>
+                <option value="5">5 sao</option>
+                <option value="4">4 sao</option>
+                <option value="3">3 sao</option>
+                <option value="2">2 sao</option>
+                <option value="1">1 sao</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Trạng thái:</label>
+            <select id="statusFilter" onchange="filterReviews()">
+                <option value="">Tất cả</option>
+                <option value="approved">Đã duyệt</option>
+                <option value="pending">Chờ duyệt</option>
+                <option value="rejected">Đã từ chối</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label>Ngày:</label>
+            <input type="date" id="dateFilter" onchange="filterReviews()">
+        </div>
+
+        <div class="filter-group">
+            <label>Tìm kiếm:</label>
+            <input type="text" id="searchFilter" placeholder="Tên khách hàng, nội dung..." onkeyup="filterReviews()">
+        </div>
+    </div>
+
+    <!-- Reviews List -->
+    <div class="reviews-container">
+        <div class="review-item" data-rating="5" data-status="approved">
+            <div class="review-header">
+                <div class="customer-info">
+                    <img src="~/Images/avt.jpg" alt="Avatar" class="customer-avatar">
+                    <div class="customer-details">
+                        <h4>Nguyễn Văn A</h4>
+                        <span class="customer-id">#KH001</span>
+                    </div>
+                </div>
+                <div class="review-meta">
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <span class="rating-number">5.0</span>
+                    </div>
+                    <span class="review-date">15/12/2024</span>
+                    <span class="review-status approved">Đã duyệt</span>
+                </div>
+            </div>
+
+            <div class="review-content">
+                <div class="order-info">
+                    <span class="order-link">#DH001</span>
+                    <span class="food-item">Cơm tấm sườn nướng</span>
+                </div>
+                <p class="review-text">
+                    "Món ăn rất ngon, sườn nướng thơm phức, cơm tấm dẻo vừa phải. Giao hàng nhanh chóng, shipper thân thiện. Sẽ đặt lại lần sau!"
+                </p>
+
+                <div class="review-images">
+                    <img src="~/Images/com-tam-2.jpg" alt="Review image" onclick="viewImage(this)">
+                    <img src="~/Images/com-tam-4.jpg" alt="Review image" onclick="viewImage(this)">
+                </div>
+            </div>
+
+            <div class="review-actions">
+                <button class="btn-action approve" onclick="approveReview(1)" title="Duyệt">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="btn-action reject" onclick="rejectReview(1)" title="Từ chối">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="btn-action reply" onclick="replyReview(1)" title="Phản hồi">
+                    <i class="fas fa-reply"></i>
+                </button>
+                <button class="btn-action delete" onclick="deleteReview(1)" title="Xóa">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+
+            <div class="admin-reply" style="display: none;">
+                <div class="reply-form">
+                    <textarea placeholder="Nhập phản hồi của bạn..."></textarea>
+                    <div class="reply-actions">
+                        <button class="btn-cancel" onclick="cancelReply(1)">Hủy</button>
+                        <button class="btn-send" onclick="sendReply(1)">Gửi phản hồi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="review-item" data-rating="2" data-status="pending">
+            <div class="review-header">
+                <div class="customer-info">
+                    <img src="~/Images/avt1.jpg" alt="Avatar" class="customer-avatar">
+                    <div class="customer-details">
+                        <h4>Trần Thị B</h4>
+                        <span class="customer-id">#KH002</span>
+                    </div>
+                </div>
+                <div class="review-meta">
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span class="rating-number">2.0</span>
+                    </div>
+                    <span class="review-date">14/12/2024</span>
+                    <span class="review-status pending">Chờ duyệt</span>
+                </div>
+            </div>
+
+            <div class="review-content">
+                <div class="order-info">
+                    <span class="order-link">#DH002</span>
+                    <span class="food-item">Phở bò tái</span>
+                </div>
+                <p class="review-text">
+                    "Phở hơi nhạt, thịt không tươi lắm. Giao hàng chậm hơn so với thời gian hẹn. Cần cải thiện chất lượng."
+                </p>
+            </div>
+
+            <div class="review-actions">
+                <button class="btn-action approve" onclick="approveReview(2)">
+                    <i class="fas fa-check"></i>
+                </button>
+                <button class="btn-action reject" onclick="rejectReview(2)">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button class="btn-action reply" onclick="replyReview(2)">
+                    <i class="fas fa-reply"></i>
+                </button>
+                <button class="btn-action delete" onclick="deleteReview(2)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="review-item" data-rating="4" data-status="approved">
+            <div class="review-header">
+                <div class="customer-info">
+                    <img src="~/Images/avt2.jpg" alt="Avatar" class="customer-avatar">
+                    <div class="customer-details">
+                        <h4>Lê Văn C</h4>
+                        <span class="customer-id">#KH003</span>
+                    </div>
+                </div>
+                <div class="review-meta">
+                    <div class="rating-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="far fa-star"></i>
+                        <span class="rating-number">4.0</span>
+                    </div>
+                    <span class="review-date">13/12/2024</span>
+                    <span class="review-status approved">Đã duyệt</span>
+                </div>
+            </div>
+
+            <div class="review-content">
+                <div class="order-info">
+                    <span class="order-link">#DH003</span>
+                    <span class="food-item">Bánh mì thịt nướng</span>
+                </div>
+                <p class="review-text">
+                    "Bánh mì ngon, thịt nướng đậm đà. Chỉ có điều bánh hơi khô một chút. Nhìn chung vẫn hài lòng."
+                </p>
+
+                <div class="admin-response">
+                    <div class="response-header">
+                        <strong>Phản hồi từ FoodOrder:</strong>
+                        <span class="response-date">13/12/2024</span>
+                    </div>
+                    <p>Cảm ơn anh đã đánh giá! Chúng tôi sẽ chú ý hơn về độ ẩm của bánh mì. Rất mong được phục vụ anh lần sau!</p>
+                </div>
+            </div>
+
+            <div class="review-actions">
+                <button class="btn-action reply" onclick="replyReview(3)">
+                    <i class="fas fa-reply"></i>
+                </button>
+                <button class="btn-action delete" onclick="deleteReview(3)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        <button class="page-btn prev" onclick="changePage(-1)">
+            <i class="fas fa-chevron-left"></i>
+            Trước
+        </button>
+        <span class="page-info">Trang 1 / 8</span>
+        <button class="page-btn next" onclick="changePage(1)">
+            Sau
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+</div>

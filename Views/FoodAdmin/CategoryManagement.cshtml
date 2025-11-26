@@ -1,0 +1,196 @@
+﻿@{
+    ViewData["Title"] = "Quản lý danh mục";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/food-Category-Management.css" />
+}
+
+<div class="admin-page">
+    <div class="page-header">
+        <h1>Quản lý danh mục món ăn</h1>
+        <button class="btn-primary" onclick="showAddCategoryModal()">
+            <i class="fas fa-plus"></i>
+            Thêm danh mục mới
+        </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-list"></i>
+            </div>
+            <div class="stat-content">
+                <h3>12</h3>
+                <p>Tổng danh mục</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-eye"></i>
+            </div>
+            <div class="stat-content">
+                <h3>10</h3>
+                <p>Đang hiển thị</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-eye-slash"></i>
+            </div>
+            <div class="stat-content">
+                <h3>2</h3>
+                <p>Đang ẩn</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="categories-grid">
+        <!-- Category Item 1 -->
+        <div class="category-card">
+            <div class="category-image">
+                <img src="~/Images/com-ga.jpg" alt="Cơm">
+                <div class="category-overlay">
+                    <div class="category-actions">
+                        <button class="btn-edit" onclick="editCategory(1)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete" onclick="deleteCategory(1)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="category-info">
+                <h3>Cơm</h3>
+                <p class="category-description">Các món cơm đa dạng</p>
+                <div class="category-stats">
+                    <span class="food-count">45 món</span>
+                    <span class="status-badge active">Hiển thị</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Item 2 -->
+        <div class="category-card">
+            <div class="category-image">
+                <img src="~/Images/pho-bo.jpg" alt="Phở">
+                <div class="category-overlay">
+                    <div class="category-actions">
+                        <button class="btn-edit" onclick="editCategory(2)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete" onclick="deleteCategory(2)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="category-info">
+                <h3>Phở</h3>
+                <p class="category-description">Phở bò, phở gà truyền thống</p>
+                <div class="category-stats">
+                    <span class="food-count">15 món</span>
+                    <span class="status-badge active">Hiển thị</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Item 3 -->
+        <div class="category-card">
+            <div class="category-image">
+                <img src="~/Images/banh-mi-thit-nuong.jpg" alt="Bánh mì">
+                <div class="category-overlay">
+                    <div class="category-actions">
+                        <button class="btn-edit" onclick="editCategory(3)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete" onclick="deleteCategory(3)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="category-info">
+                <h3>Bánh mì</h3>
+                <p class="category-description">Bánh mì Việt Nam</p>
+                <div class="category-stats">
+                    <span class="food-count">12 món</span>
+                    <span class="status-badge inactive">Ẩn</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Item 4 -->
+        <div class="category-card">
+            <div class="category-image">
+                <img src="~/Images/do-uong.jpg" alt="Đồ uống">
+                <div class="category-overlay">
+                    <div class="category-actions">
+                        <button class="btn-edit" onclick="editCategory(4)">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-delete" onclick="deleteCategory(4)">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="category-info">
+                <h3>Đồ uống</h3>
+                <p class="category-description">Nước uống, trà, cà phê</p>
+                <div class="category-stats">
+                    <span class="food-count">28 món</span>
+                    <span class="status-badge active">Hiển thị</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add/Edit Category Modal -->
+<div class="modal" id="categoryModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Thêm danh mục mới</h3>
+            <button class="modal-close" onclick="closeCategoryModal()">&times;</button>
+        </div>
+
+        <div class="modal-body">
+            <form id="categoryForm">
+                <div class="form-group">
+                    <label for="categoryName">Tên danh mục *</label>
+                    <input type="text" id="categoryName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryDescription">Mô tả</label>
+                    <textarea id="categoryDescription" rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryImage">Hình ảnh</label>
+                    <input type="file" id="categoryImage" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryStatus">Trạng thái</label>
+                    <select id="categoryStatus">
+                        <option value="active">Hiển thị</option>
+                        <option value="inactive">Ẩn</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeCategoryModal()">Hủy</button>
+            <button class="btn-save" onclick="saveCategory()">Lưu</button>
+        </div>
+    </div>
+</div>

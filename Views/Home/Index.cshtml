@@ -1,0 +1,219 @@
+﻿@model Asm_GD1.Models.ProductViewModel
+@{
+    ViewData["Title"] = "Trang chủ";
+    var defaultSize = Model.Sizes?.FirstOrDefault(s => s.ExtraPrice == 0) ?? Model.Sizes?.FirstOrDefault();
+    var defaultSizeId = defaultSize?.SizeID ?? 0;
+}
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/home.css" />
+}
+
+<section class="hero">
+    <img src="~/Images/banner1.jpg" alt="Banner khuyến mãi" />
+    <div class="hero-content">
+        <h1>Đặt đồ ăn ngon - Giao hàng nhanh</h1>
+        <p>Thưởng thức những món ăn tuyệt vời từ chúng tôi</p>
+    </div>
+</section>
+
+<section class="highlights">
+    <div class="container">
+        <h2>Món nổi bật</h2>
+        <div class="food-grid">
+            
+            @* ✅ PHẦN 1: MÓN ĂN TỪ DATABASE *@
+            @if (Model?.Product != null && Model.Product.Any())
+            {
+                @foreach (var product in Model.Product)
+                {
+                    <div class="food-card">
+                        <div class="food-image">
+                            <img src="@Url.Content(product.ImageUrl ?? "~/Images/default-food.jpg")" alt="@product.Name">
+                            @if (product.DiscountPercent > 0)
+                            {
+                                <div class="discount-badge">-@product.DiscountPercent%</div>
+                            }
+                        </div>
+                        <div class="food-info">
+                            <h3>@product.Name</h3>
+                            <p>@product.Description</p>
+                            <div class="rating">
+                                <span class="stars">★★★★★</span>
+                                <span class="rating-text">(4.8)</span>
+                            </div>
+                            <div class="price-section">
+                                @if (product.DiscountPercent > 0)
+                                {
+                                    <span class="old-price">@product.BasePrice.ToString("N0") VNĐ</span>
+                                    <span class="price">
+                                        @((product.BasePrice * (100 - product.DiscountPercent) / 100).ToString("N0")) VNĐ
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="price">@product.BasePrice.ToString("N0") VNĐ</span>
+                                }
+                            </div>
+                            <div class="card-actions">
+                                @* ✅ FIX: Bỏ "?Id", chỉ giữ "Detail" *@
+                                <a asp-controller="Food" asp-action="Detail" asp-route-id="@product.ProductID" class="btn-detail">
+                                    Xem chi tiết
+                                </a>
+
+                                <form asp-controller="Cart" asp-action="AddToCart" method="post" asp-route-id="@product.ProductID">
+                                    <input type="hidden" name="sizeId" value="@defaultSizeId" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn-order">Đặt món</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            @* ✅ PHẦN 2: MÓN ĂN HARDCODE *@
+            
+            <!-- Món 1 -->
+            <div class="food-card">
+                <div class="food-image">
+                    <img src="~/Images/com-tam.jpg" alt="Cơm tấm sườn nướng">
+                    <div class="discount-badge">-15%</div>
+                </div>
+                <div class="food-info">
+                    <h3>Cơm tấm sườn nướng</h3>
+                    <p>Cơm tấm thơm ngon với sườn nướng BBQ, chả trứng và bì</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">(4.8)</span>
+                    </div>
+                    <div class="price-section">
+                        <span class="old-price">55,000 VNĐ</span>
+                        <span class="price">45,000 VNĐ</span>
+                    </div>
+                    <div class="card-actions">
+                        @* ✅ FIX: Đổi từ ?Id/1 thành ?id=1 *@
+                        <a href="/Food/Detail?id=1" class="btn-detail">Xem chi tiết</a>
+                        <button class="btn-order" onclick="addToCart(1)">Đặt món</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Món 2 -->
+            <div class="food-card">
+                <div class="food-image">
+                    <img src="~/Images/pho-bo.jpg" alt="Phở bò tái">
+                    <div class="hot-badge">HOT</div>
+                </div>
+                <div class="food-info">
+                    <h3>Phở bò tái</h3>
+                    <p>Phở bò truyền thống với thịt tái tươi ngon, nước dùng đậm đà</p>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-text">(4.5)</span>
+                    </div>
+                    <div class="price-section">
+                        <span class="price">65,000 VNĐ</span>
+                    </div>
+                    <div class="card-actions">
+                        @* ✅ FIX: Đổi từ DetailById thành Detail?id= *@
+                        <a href="/Food/Detail?id=2" class="btn-detail">Xem chi tiết</a>
+                        <button class="btn-order" onclick="alert('Thêm vào giỏ hàng!')">Đặt món</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Món 3 -->
+            <div class="food-card">
+                <div class="food-image">
+                    <img src="~/Images/banh-mi-thit-nuong.jpg" alt="Bánh mì thịt nướng">
+                    <div class="new-badge">MỚI</div>
+                </div>
+                <div class="food-info">
+                    <h3>Bánh mì thịt nướng</h3>
+                    <p>Bánh mì Việt Nam với thịt nướng thơm lừng, rau thơm tươi</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">(4.7)</span>
+                    </div>
+                    <div class="price-section">
+                        <span class="price">25,000 VNĐ</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/Food/Detail?id=3" class="btn-detail">Xem chi tiết</a>
+                        <button class="btn-order" onclick="alert('Thêm vào giỏ hàng!')">Đặt món</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Món 4 -->
+            <div class="food-card">
+                <div class="food-image">
+                    <img src="~/Images/bun-bo.jpg" alt="Bún bò Huế">
+                </div>
+                <div class="food-info">
+                    <h3>Bún bò Huế</h3>
+                    <p>Bún bò Huế cay nồng đặc trưng, chả cua, giò heo</p>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-text">(4.3)</span>
+                    </div>
+                    <div class="price-section">
+                        <span class="price">58,000 VNĐ</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/Food/Detail?id=4" class="btn-detail">Xem chi tiết</a>
+                        <button class="btn-order" onclick="alert('Thêm vào giỏ hàng!')">Đặt món</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Món 5 -->
+            <div class="food-card">
+                <div class="food-image">
+                    <img src="~/Images/com-ga.jpg" alt="Cơm gà nướng">
+                </div>
+                <div class="food-info">
+                    <h3>Cơm gà nướng</h3>
+                    <p>Cơm gà nướng mật ong thơm phức, kèm rau củ tươi ngon</p>
+                    <div class="rating">
+                        <span class="stars">★★★★★</span>
+                        <span class="rating-text">(4.6)</span>
+                    </div>
+                    <div class="price-section">
+                        <span class="price">52,000 VNĐ</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/Food/Detail?id=5" class="btn-detail">Xem chi tiết</a>
+                        <button class="btn-order" onclick="alert('Thêm vào giỏ hàng!')">Đặt món</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Món 6 -->
+            <div class="food-card">
+                <div class="food-image">
+                    <img src="~/Images/hu-tieu-nam-vang.jpg" alt="Hủ tiếu Nam Vang">
+                </div>
+                <div class="food-info">
+                    <h3>Hủ tiếu Nam Vang</h3>
+                    <p>Hủ tiếu Nam Vang truyền thống với tôm, thịt, gan, tim</p>
+                    <div class="rating">
+                        <span class="stars">★★★★☆</span>
+                        <span class="rating-text">(4.4)</span>
+                    </div>
+                    <div class="price-section">
+                        <span class="price">48,000 VNĐ</span>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/Food/Detail?id=6" class="btn-detail">Xem chi tiết</a>
+                        <button class="btn-order" onclick="addToCart(4)">Đặt món</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="view-all">
+            <a asp-controller="Food" asp-action="Order" class="btn-view-all">Xem tất cả món ăn</a>
+        </div>
+    </div>
+</section>
