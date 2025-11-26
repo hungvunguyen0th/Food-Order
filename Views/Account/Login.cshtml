@@ -2,7 +2,7 @@
     ViewData["Title"] = "Đăng nhập";
     Layout = "_Layout";
 }
-@model Asm_GD1.Models.Account
+@model Asm_GD1.ViewModels.LoginViewModel
 @section Styles {
     <link rel="stylesheet" href="~/css/pages/login.css" />
 }
@@ -11,24 +11,36 @@
     <div class="auth-form">
         <h2>Đăng nhập</h2>
 
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" style="margin-bottom: 20px; padding: 15px; background: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 5px;">
+                <i class="fas fa-check-circle"></i>
+                @TempData["SuccessMessage"]
+            </div>
+        }
+
         @if (ViewBag.Error != null)
         {
-            <div class="alert alert-danger">
+            <div class="alert alert-danger" style="margin-bottom: 20px; padding: 15px; background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 5px;">
                 <i class="fas fa-exclamation-circle"></i>
                 @ViewBag.Error
             </div>
         }
 
         <form asp-controller="Account" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
             <div class="form-group">
-                <label asp-for="Email">Email hoặc tên đăng nhập <span style="color:orangered">*</span></label>
-                <input asp-for="Email" class="form-control" required>
+                <label asp-for="Email">Email <span style="color:orangered">*</span></label>
+                <input asp-for="Email" type="email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Password">Mật khẩu <span style="color:orangered">*</span></label>
-                <input asp-for="Password" type="password" class="form-control" required />
+                <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
@@ -36,6 +48,7 @@
                 <input asp-for="RememberMe" type="checkbox" class="form-check-input" />
                 <label asp-for="RememberMe" class="form-check-label">Ghi nhớ đăng nhập</label>
             </div>
+
             <button type="submit" class="btn-primary">Đăng nhập</button>
         </form>
 
@@ -45,7 +58,7 @@
         </div>
 
         <div class="social-login">
-            <button class="btn-google">
+            <button class="btn-google" onclick="loginWithGoogle()">
                 <img src="~/Images/google-icon.png" alt="Google">
                 Đăng nhập với Google
             </button>
@@ -53,20 +66,10 @@
 
         <script>
             function loginWithGoogle() {
-                window.open('https://accounts.google.com/v3/signin/identifier?flowName=GlifWebSignIn', '_blank');
+                window.open('https://accounts.google.com/v3/signin/identifier? flowName=GlifWebSignIn', '_blank');
             }
         </script>
 
-        <!-- Demo Info -->
-        <div class="demo-info">
-            <p><strong>Tài khoản demo:</strong></p>
-            <ul>
-                <li>Khách hàng: <code>user</code> / <code>user</code></li>
-                <li>Nhân viên: <code>staff</code> / <code>staff</code></li>
-                <li>Admin: <code>adminit</code> / <code>adminit</code></li>
-                <li>Quản lý User: <code>admin</code> / <code>admin</code></li>
-                <li>Quản lý Food: <code>admin1</code> / <code>admin1</code></li>
-            </ul>
-        </div>
-    </div>
-</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

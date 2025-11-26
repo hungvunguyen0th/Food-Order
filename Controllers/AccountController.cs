@@ -34,6 +34,13 @@ namespace Asm_GD1.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            var existingUser = await _userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
+            {
+                ModelState.AddModelError("Email", "Email này đã được sử dụng.");
+                return View(model);
+            }
+
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -57,7 +64,7 @@ namespace Asm_GD1.Controllers
                 SetCartIdToSession(cart.CartID);
 
                 TempData["SuccessMessage"] = "Đăng ký thành công!";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Login", "Account");
             }
 
             foreach (var error in result.Errors)
