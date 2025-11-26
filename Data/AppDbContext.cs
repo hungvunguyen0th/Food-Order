@@ -18,6 +18,8 @@ namespace Asm_GD1.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Discount> Discounts { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         // Giữ tạm Account để migration dần
         public DbSet<Account> Accounts { get; set; }
 
@@ -110,6 +112,34 @@ namespace Asm_GD1.Data
                 entity.Property(e => e.DiscountPercent).HasColumnType("decimal(5,2)");
                 entity.Property(e => e.MaxDiscountAmount).HasColumnType("decimal(18,2)");
                 entity.Property(e => e.MinOrderAmount).HasColumnType("decimal(18,2)");
+            });
+
+            // ===== CẤU HÌNH CHO ORDER =====
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasKey(e => e.OrderID);
+                entity.Property(e => e.SubTotal).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.ShippingFee).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.DiscountAmount).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.TotalAmount).HasColumnType("decimal(18,2)");
+            });
+
+            // ===== CẤU HÌNH CHO ORDERITEM =====
+            modelBuilder.Entity<OrderItem>(entity =>
+            {
+                entity.HasKey(e => e.OrderItemID);
+                entity.Property(e => e.UnitPrice).HasColumnType("decimal(18,2)");
+                entity.Property(e => e.TotalPrice).HasColumnType("decimal(18,2)");
+
+                entity.HasOne(oi => oi.Order)
+                    .WithMany(o => o.OrderItems)
+                    .HasForeignKey(oi => oi.OrderID)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(oi => oi.Product)
+                    .WithMany()
+                    .HasForeignKey(oi => oi.ProductID)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
