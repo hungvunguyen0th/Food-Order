@@ -533,3 +533,469 @@ body {
         max-height: 50vh;
     }
 }
+
+
+
+/*Pos enchan===========================================================================*/
+
+/* ================================================
+   TOAST NOTIFICATIONS
+   ================================================ */
+. toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: #333;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 280px;
+    max-width: 400px;
+}
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    .toast i {
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .toast span {
+        flex: 1;
+        font-size: 14px;
+    }
+
+.toast-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+. toast-error {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.toast-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.toast-info {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+/* ================================================
+   LOADING OVERLAY
+   ================================================ */
+. loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    animation: fadeIn 0.2s ease;
+}
+
+. spinner-container {
+    text-align: center;
+    color: white;
+}
+
+.spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255, 255, 255, 0.2);
+    border-top: 5px solid #fff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 15px;
+}
+
+. spinner-container p {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ================================================
+   ORDER ITEMS ENHANCED
+   ================================================ */
+. order-item {
+    padding: 15px;
+    border-bottom: 1px solid #e5e7eb;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 15px;
+    align-items: center;
+    transition: all 0.2s ease;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.order-item:hover {
+    background: #f9fafb;
+    box-shadow: inset 0 0 0 1px #e5e7eb;
+}
+
+.item-info h4 {
+    margin: 0 0 5px 0;
+    font-size: 15px;
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.item-price {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-quantity {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: white;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0. 2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+    .btn-quantity:hover {
+        background: #f3f4f6;
+        border-color: #9ca3af;
+        transform: scale(1.05);
+    }
+
+    .btn-quantity:active {
+        transform: scale(0.95);
+    }
+
+.btn-remove {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #fecaca;
+    background: #fee2e2;
+    color: #dc2626;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .btn-remove:hover {
+        background: #fecaca;
+        border-color: #fca5a5;
+        transform: scale(1.05);
+    }
+
+    .btn-remove:active {
+        transform: scale(0.95);
+    }
+
+.quantity {
+    min-width: 35px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 16px;
+    color: #1f2937;
+}
+
+.item-total {
+    font-weight: 700;
+    color: #059669;
+    font-size: 15px;
+    text-align: right;
+}
+
+/* ================================================
+   PRODUCT CARD ENHANCED
+   ================================================ */
+.product-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    user-select: none;
+}
+
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    }
+
+    .product-card:active {
+        transform: translateY(-2px);
+        transition: all 0.1s;
+    }
+
+    .product-card . btn-add {
+        transition: all 0.2s ease;
+    }
+
+        .product-card .btn-add:hover {
+            transform: scale(1.1);
+        }
+
+        .product-card .btn-add:active {
+            transform: scale(0.95);
+        }
+
+/* ================================================
+   BUTTONS ENHANCED
+   ================================================ */
+.btn-complete-order,
+.btn-hold-order,
+.btn-clear-order {
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    . btn-complete-order::before,
+    .btn-hold-order::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+
+    .btn-complete-order:active::before,
+    .btn-hold-order:active::before {
+        width: 300px;
+        height: 300px;
+    }
+
+    .btn-complete-order:hover,
+    .btn-hold-order:hover,
+    .btn-clear-order:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    .btn-complete-order:active,
+    .btn-hold-order:active,
+    .btn-clear-order:active {
+        transform: translateY(0);
+    }
+
+/* ================================================
+   PAYMENT METHODS ENHANCED
+   ================================================ */
+.payment-btn {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+    .payment-btn::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 3px;
+        background: currentColor;
+        transform: translateX(-50%);
+        transition: width 0.3s ease;
+    }
+
+    .payment-btn. active::after {
+        width: 80%;
+    }
+
+    .payment-btn:hover {
+        transform: translateY(-3px);
+    }
+
+/* ================================================
+   SEARCH BOX ENHANCED
+   ================================================ */
+.search-box {
+    position: relative;
+}
+
+    .search-box input:focus {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        border-color: #3b82f6;
+    }
+
+    .search-box i {
+        transition: color 0.2s;
+    }
+
+    .search-box input:focus + i {
+        color: #3b82f6;
+    }
+
+/* ================================================
+   CATEGORY FILTER ENHANCED
+   ================================================ */
+.category-btn {
+    transition: all 0.2s ease;
+}
+
+    .category-btn:hover {
+        transform: translateY(-2px);
+    }
+
+    . category-btn.active {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+/* ================================================
+   EMPTY STATE ENHANCED
+   ================================================ */
+.empty-order {
+    animation: fadeIn 0.3s ease;
+}
+
+    . empty-order i {
+        animation: float 3s ease-in-out infinite;
+    }
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* ================================================
+   RESPONSIVE ENHANCEMENTS
+   ================================================ */
+@media (max-width: 768px) {
+    . toast-container {
+        left: 10px;
+        right: 10px;
+        top: 70px;
+    }
+
+    .toast {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .order-item {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .item-controls {
+        justify-content: center;
+    }
+
+    .item-total {
+        text-align: center;
+        font-size: 16px;
+    }
+}
+
+/* ================================================
+   SCROLLBAR STYLING
+   ================================================ */
+. order-items::-webkit-scrollbar {
+    width: 8px;
+}
+
+.order-items::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.order-items::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+    .order-items::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
+
+/* ================================================
+   PRINT STYLES
+   ================================================ */
+@media print {
+    . pos-header,
+    .category-filter,
+    .search-box,
+    .products-section,
+    .order-actions,
+    .payment-methods,
+    .btn-clear-order {
+        display: none !important;
+    }
+
+    . order-section {
+        width: 100%;
+        max-width: 100%;
+    }
+}

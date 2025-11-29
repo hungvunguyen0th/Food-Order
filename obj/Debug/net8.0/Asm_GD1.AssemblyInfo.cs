@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Asm_GD1")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+72db25449fea0baee16bbe9cc12838afbe2b9ded")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f3299f9f6d447a300c8312d0ae05728d3a30eb11")]
 [assembly: System.Reflection.AssemblyProductAttribute("Asm_GD1")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Asm_GD1")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
