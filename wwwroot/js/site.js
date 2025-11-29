@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const mobileToggle = document.querySelector('.mobile-menu-toggle');
     const navMenu = document.querySelector('.nav-menu');
 
+    if (!header) {
+        console.log('Header not found - skipping navigation init');
+        return;
+    }
+
     // Sticky navigation với hiệu ứng
     window.addEventListener('scroll', function () {
         if (window.scrollY > 100) {

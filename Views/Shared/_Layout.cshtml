@@ -523,9 +523,15 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/mobile-menu.js" asp-append-version="true"></script>
+
+    <!-- CHỈ LOAD POS. JS KHI Ở TRANG POS -->
+    @if (ViewContext.RouteData.Values["controller"]?.ToString() == "POS")
+    {
+        <script src="~/js/pos.js" asp-append-version="true"></script>
+    }
 
     @RenderSection("Scripts", required: false)
 </body>

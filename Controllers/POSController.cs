@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Asm_GD1.Controllers
 {
-    [Authorize(Roles = "Staff")]
+[Authorize(Roles = "AdminIT,FoodAdmin,Staff")]
     public class POSController : Controller
     {
         private readonly AppDbContext _context;

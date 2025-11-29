@@ -6,7 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Asm_GD1.Controllers
 {
-    [Authorize(Policy = "CanManageFood")]
+    //[Authorize(Policy = "CanManageFood")]
+    [Authorize(Roles = "AdminIT,FoodAdmin")]
     public class FoodAdminController : Controller
     {
         private readonly AppDbContext _context;
