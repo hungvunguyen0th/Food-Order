@@ -223,7 +223,7 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
     {
         var admin = new ApplicationUser
         {
-            UserName = "adminit@gmail. com",
+            UserName = "adminit@gmail.com",
             Email = "adminit@gmail.com",
             FullName = "Super Administrator",
             EmailConfirmed = true,
