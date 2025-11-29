@@ -20,7 +20,7 @@ namespace Asm_GD1.Data
         public DbSet<Discount> Discounts { get; set; }
         // Giữ tạm Account để migration dần
         public DbSet<Account> Accounts { get; set; }
-
+        public DbSet<Order> Orders { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // QUAN TRỌNG: Gọi base trước để Identity cấu hình các bảng
