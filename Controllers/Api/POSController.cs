@@ -185,8 +185,8 @@ namespace Asm_GD1.Controllers.Api
                 UpdatedAt = order.UpdatedAt
             };
 
-            return CreatedAtAction(nameof(GetPendingOrders), 
-                ApiResponse<OrderDto>.SuccessResponse(orderDto, "Order created successfully"));
+            // Return standardized success response
+            return Ok(ApiResponse<OrderDto>.SuccessResponse(orderDto, "Order created successfully"));
         }
 
         /// <summary>

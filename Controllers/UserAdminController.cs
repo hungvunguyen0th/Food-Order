@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Asm_GD1.Controllers
 {
-    [Authorize(Policy = "CanManageUser")]
+    [Authorize(Roles = "AdminIT,UserAdmin")]
     public class UserAdminController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

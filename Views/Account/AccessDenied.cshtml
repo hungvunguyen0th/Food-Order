@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Truy c?p b? t? ch?i";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="alert alert-danger text-center" style="padding: 40px; border-radius: 10px;">
+                <div style="font-size: 3rem; margin-bottom: 20px;">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h1>Truy c?p b? t? ch?i</h1>
+                <p style="font-size: 1.1rem; margin: 20px 0;">
+                    Xin l?i, b?n không có quy?n truy c?p trang này.
+                </p>
+                <p style="color: #666; margin-bottom: 30px;">
+                    N?u b?n cho r?ng ?ây là l?i, vui lòng liên h? v?i qu?n tr? viên.
+                </p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">
+                        <i class="fas fa-home"></i> V? trang ch?
+                    </a>
+                    <a href="@Url.Action("Logout", "Account")" class="btn btn-secondary">
+                        <i class="fas fa-sign-out-alt"></i> ??ng xu?t
+                    </a>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                <h5>Thông tin tài kho?n c?a b?n:</h5>
+                @if (User?.Identity?.IsAuthenticated == true)
+                {
+                    <p><strong>Tên ??ng nh?p:</strong> @User.Identity?.Name</p>
+                    <p><strong>Vai trò:</strong> 
+                        @{
+                            var roles = User.FindAll(System.Security.Claims.ClaimTypes.Role);
+                            if (roles.Any())
+                            {
+                                <span>@string.Join(", ", roles.Select(r => r.Value))</span>
+                            }
+                            else
+                            {
+                                <span>Khách (Customer)</span>
+                            }
+                        }
+                    </p>
+                }
+                else
+                {
+                    <p>B?n ch?a ??ng nh?p. Vui lòng <a asp-action="Login">??ng nh?p</a> ?? ti?p t?c.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn {
+        padding: 10px 20px;
+        margin: 5px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary {
+        background: #007bff;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0056b3;
+        transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+</style>

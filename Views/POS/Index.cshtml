@@ -9,7 +9,7 @@
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1. 0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/pages/pos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -25,7 +25,7 @@
             <div class="header-right">
                 <div class="staff-info">
                     <i class="fas fa-user-circle"></i>
-                    <span>@(User.Identity?. Name ?? "Staff")</span>
+                    <span>@(User.Identity?.Name ?? "Staff")</span>
                 </div>
                 <div class="current-time" id="currentTime"></div>
                 <a asp-controller="Account" asp-action="Logout" class="btn-logout">
@@ -79,7 +79,7 @@
                                     <h3>@product.Name</h3>
                                     <p class="price">@string.Format("{0:N0}₫", price)</p>
                                 </div>
-                                <button class="btn-add" onclick="addToOrder(@product.ProductID, '@Html.Raw(product.Name. Replace("'", "\\'"))', @price)">
+                                <button class="btn-add" onclick="addToOrder(@product.ProductID, '@Html.Raw(product.Name.Replace("'", "\\'"))', @price)">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
@@ -110,11 +110,31 @@
                     <input type="text" id="customerPhone" placeholder="Số điện thoại" class="input-customer">
                 </div>
 
+                <!-- Discount / Coupon -->
+                <div class="discount-panel">
+                    <input type="text" id="discountCodeInput" placeholder="Nhập mã giảm giá" class="input-customer" />
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <select id="discountSelect" class="input-customer" style="flex:1;"></select>
+                        <button class="btn-apply-discount" onclick="applyDiscountFromInput()">Áp dụng</button>
+                    </div>
+                    <div id="appliedDiscount" style="margin-top:8px; font-size:13px; color:#059669; display:none;">Mã đã áp dụng: <span id="appliedDiscountText"></span></div>
+                </div>
+
                 <!-- Order Items -->
                 <div class="order-items" id="orderItems">
                     <div class="empty-order">
                         <i class="fas fa-shopping-basket"></i>
                         <p>Chưa có món nào</p>
+                    </div>
+                </div>
+
+                <!-- Held Orders -->
+                <div class="held-orders-panel">
+                    <h4>Đơn đang giữ (<span id="heldCount">0</span>)</h4>
+                    <div id="heldOrdersList" style="max-height:150px; overflow:auto; margin-bottom:10px;"></div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn-apply-discount" onclick="openHeldOrdersModal()">Quản lý đơn giữ</button>
+                        <button class="btn-apply-discount" onclick="clearAllHeldOrders()">Xóa tất cả giữ</button>
                     </div>
                 </div>
 

@@ -26,6 +26,7 @@ namespace Asm_GD1.Controllers
         public IActionResult Register() => View();
         public IActionResult Profile() => View();
         public IActionResult Orders() => View();
+        public IActionResult AccessDenied() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -98,31 +99,31 @@ namespace Asm_GD1.Controllers
                     var cart = await GetOrCreateActiveCartAsync(user.Id);
                     SetCartIdToSession(cart.CartID);
 
-                    var roles = await _userManager.GetRolesAsync(user);
-                    var role = roles.FirstOrDefault()?.ToLower() ?? "customer";
-
                     TempData["SuccessMessage"] = $"Chào mừng {user.FullName ?? user.Email}!";
 
-                    if (role == "admin")
+                    // Kiểm tra role theo thứ tự ưu tiên, AdminIT là superuser
+                    if (await _userManager.IsInRoleAsync(user, "AdminIT"))
                     {
                         return RedirectToAction("Dashboard", "FoodAdmin");
                     }
-                    else if (role == "foodadmin")
+
+                    if (await _userManager.IsInRoleAsync(user, "FoodAdmin"))
                     {
                         return RedirectToAction("Dashboard", "FoodAdmin");
                     }
-                    else if (role == "useradmin")
+
+                    if (await _userManager.IsInRoleAsync(user, "UserAdmin"))
                     {
                         return RedirectToAction("Dashboard", "UserAdmin");
                     }
-                    else if (role == "staff")
+
+                    if (await _userManager.IsInRoleAsync(user, "Staff"))
                     {
                         return RedirectToAction("Index", "POS");
                     }
-                    else
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
+
+                    // Default to customer/home
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

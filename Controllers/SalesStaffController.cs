@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Asm_GD1.Controllers
 {
-    [Authorize(Roles = "staff,employee1,employee2")]
+    [Authorize(Roles = "AdminIT,FoodAdmin,UserAdmin,Staff")]
     public class SalesStaffController : Controller
     {
         // Dashboard chính của nhân viên bán hàng

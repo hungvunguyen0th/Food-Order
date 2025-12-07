@@ -67,14 +67,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Add JWT Authentication
+// Add JWT Authentication (CHỈ cho API, không dùng cho MVC)
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var secretKey = jwtSettings["Secret"] ?? "YourSuperSecretKeyThatIsAtLeast32CharactersLong!";
 
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    // Mặc định dùng Cookie cho MVC (Identity đã đăng ký cookie scheme)
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
 })
 .AddJwtBearer(options =>
 {
@@ -219,12 +220,14 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
     }
 
     // ✅ SuperAdmin (AdminIT)
-    if (await userManager.FindByEmailAsync("adminit@gmail.com") == null)
+    var adminEmail = "adminit@gmail.com";
+    var admin = await userManager.FindByEmailAsync(adminEmail);
+    if (admin == null)
     {
-        var admin = new ApplicationUser
+        admin = new ApplicationUser
         {
-            UserName = "adminit@gmail.com",
-            Email = "adminit@gmail.com",
+            UserName = adminEmail,
+            Email = adminEmail,
             FullName = "Super Administrator",
             EmailConfirmed = true,
             CreatedAt = DateTime.Now,
@@ -232,10 +235,35 @@ async Task SeedDataAsync(UserManager<ApplicationUser> userManager, RoleManager<I
         };
 
         var result = await userManager.CreateAsync(admin, "AdminIT@123");
-        if (result.Succeeded)
+        if (!result.Succeeded)
         {
-            await userManager.AddToRoleAsync(admin, "AdminIT");
+            Console.WriteLine($"❌ Failed to create AdminIT: {string.Join(';', result.Errors.Select(e => e.Description))}");
         }
+    }
+
+    // Ensure AdminIT has all elevated roles
+    var requiredAdminRoles = new[] { "AdminIT", "FoodAdmin", "UserAdmin", "Staff" };
+    var existingRoles = await userManager.GetRolesAsync(admin);
+    foreach (var roleName in requiredAdminRoles)
+    {
+        if (!existingRoles.Contains(roleName))
+        {
+            await userManager.AddToRoleAsync(admin, roleName);
+            Console.WriteLine($"✅ Added role '{roleName}' to {adminEmail}");
+        }
+    }
+
+    // Ensure AdminIT has management claims
+    var existingClaims = await userManager.GetClaimsAsync(admin);
+    if (!existingClaims.Any(c => c.Type == "CanManageFood" && c.Value == "true"))
+    {
+        await userManager.AddClaimAsync(admin, new System.Security.Claims.Claim("CanManageFood", "true"));
+        Console.WriteLine($"✅ Added claim CanManageFood to {adminEmail}");
+    }
+    if (!existingClaims.Any(c => c.Type == "CanManageUser" && c.Value == "true"))
+    {
+        await userManager.AddClaimAsync(admin, new System.Security.Claims.Claim("CanManageUser", "true"));
+        Console.WriteLine($"✅ Added claim CanManageUser to {adminEmail}");
     }
 
     // ✅ Food Admin
